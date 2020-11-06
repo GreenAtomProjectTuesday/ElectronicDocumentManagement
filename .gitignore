@@ -1,0 +1,58 @@
+#eclipse project files
+**/.project
+**/.classpath
+**/.settings
+**/.dmproject
+**/.dfsproject
+**/.checkstyle
+
+# maven files
+**/target
+**/overlays
+**/bin
+**/*.class
+
+#gradle files
+build/
+HELP.md
+.gradle
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# idea project files
+*.iml
+*.ipr
+*.iws
+.idea
+/.gradle/
+**/out
+**/generated/**
+node_modules
+
+#SVN ariifacts
+.svn
+.tpignore
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+static/js
+
+# local project ignore
+/third.tasks.part.two/src/main/resources/static/js/

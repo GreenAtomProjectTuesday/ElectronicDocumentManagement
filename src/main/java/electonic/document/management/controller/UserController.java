@@ -1,5 +1,7 @@
 package electonic.document.management.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.User;
 import electonic.document.management.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
     private final UserService userService;
+    private final ObjectMapper objectMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ObjectMapper objectMapper) {
         this.userService = userService;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/registration")
@@ -25,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<String> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers().toString());
+    public ResponseEntity<String> getAllUsers() throws JsonProcessingException {
+        return ResponseEntity.ok(objectMapper.writeValueAsString(userService.getAllUsers()));
     }
 }

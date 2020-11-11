@@ -30,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration", "/static/**", "/activate/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                //TODO for Postman
                 .httpBasic()
 //                .formLogin()
 //                .loginPage("/login")

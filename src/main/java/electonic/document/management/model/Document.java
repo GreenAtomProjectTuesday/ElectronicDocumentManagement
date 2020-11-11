@@ -13,7 +13,8 @@ public class Document {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User owner;
-    //    private Task task;
+    @ManyToOne
+    private Task task;
     private String fileName;
     private String fileType;
     private Long size;
@@ -38,13 +39,13 @@ public class Document {
         this.owner = owner;
     }
 
-//    public Task getTask() {
-//        return task;
-//    }
-//
-//    public void setTask(Task task) {
-//        this.task = task;
-//    }
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
     public String getFileName() {
         return fileName;

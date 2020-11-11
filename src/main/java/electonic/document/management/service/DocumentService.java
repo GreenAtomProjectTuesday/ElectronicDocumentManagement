@@ -1,8 +1,11 @@
 package electonic.document.management.service;
 
 import electonic.document.management.model.Document;
+import electonic.document.management.repository.DocumentNamesOnly;
 import electonic.document.management.repository.DocumentRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DocumentService {
@@ -21,5 +24,9 @@ public class DocumentService {
 
         documentRepository.save(document);
         return true;
+    }
+
+    public List<DocumentNamesOnly> getAllDocumentNames() {
+        return documentRepository.findAllBy();
     }
 }

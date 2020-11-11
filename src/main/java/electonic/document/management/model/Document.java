@@ -1,12 +1,25 @@
 package electonic.document.management.model;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "documents")
 public class Document {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    // TODO FetchType Lazy?
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User owner;
-    private Task task;
+    //    private Task task;
     private String fileName;
     private String fileType;
-    private DocumentAttribute attribute;
+    private Long size;
+
+    @OneToMany(mappedBy = "document")
+    private List<DocumentAttribute> attribute;
     private byte[] content;
 
     public Long getId() {
@@ -25,13 +38,13 @@ public class Document {
         this.owner = owner;
     }
 
-    public Task getTask() {
-        return task;
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
-    }
+//    public Task getTask() {
+//        return task;
+//    }
+//
+//    public void setTask(Task task) {
+//        this.task = task;
+//    }
 
     public String getFileName() {
         return fileName;
@@ -49,12 +62,20 @@ public class Document {
         this.fileType = fileType;
     }
 
-    public DocumentAttribute getAttribute() {
+    public List<DocumentAttribute> getAttribute() {
         return attribute;
     }
 
-    public void setAttribute(DocumentAttribute attribute) {
+    public void setAttribute(List<DocumentAttribute> attribute) {
         this.attribute = attribute;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
     }
 
     public byte[] getContent() {

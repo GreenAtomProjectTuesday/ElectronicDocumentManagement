@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //TODO why csrf token is needed here?
+        //TODO remove csrf disable (forbidden now)
         http
                 .csrf()
                 .disable()
@@ -30,9 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration", "/static/**", "/activate/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
+                .httpBasic()
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
                 .and()
                 .rememberMe()
                 .and()

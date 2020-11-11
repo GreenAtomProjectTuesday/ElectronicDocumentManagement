@@ -4,6 +4,7 @@ import electonic.document.management.model.User;
 import electonic.document.management.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -21,5 +22,10 @@ public class UserController {
             return ResponseEntity.ok("user already exists!");
         }
         return ResponseEntity.ok("user was registered");
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<String> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers().toString());
     }
 }

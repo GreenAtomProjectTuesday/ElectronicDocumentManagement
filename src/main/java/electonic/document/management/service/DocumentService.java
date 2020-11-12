@@ -1,10 +1,11 @@
 package electonic.document.management.service;
 
 import electonic.document.management.model.Document;
-import electonic.document.management.repository.DocumentNamesOnly;
+import electonic.document.management.projections.DocumentNamesOnly;
 import electonic.document.management.repository.DocumentRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,12 +22,13 @@ public class DocumentService {
         if (documentFromDb != null) {
             return false;
         }
-
+        document.setCreationDate(LocalDateTime.now());
         documentRepository.save(document);
         return true;
     }
 
+    //TODO replace with view?
     public List<DocumentNamesOnly> getAllDocumentNames() {
-        return documentRepository.findAllBy();
+        return documentRepository.findAllBy(DocumentNamesOnly.class);
     }
 }

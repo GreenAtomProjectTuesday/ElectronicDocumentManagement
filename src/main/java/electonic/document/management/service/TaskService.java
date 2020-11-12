@@ -4,6 +4,7 @@ import electonic.document.management.model.Task;
 import electonic.document.management.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,6 +20,7 @@ public class TaskService {
         if (taskFromDb != null) {
             return false;
         }
+        task.setCreationDate(LocalDateTime.now());
         taskRepository.save(task);
         return true;
     }

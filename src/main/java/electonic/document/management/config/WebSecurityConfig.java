@@ -27,10 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/registration", "/static/**", "/activate/*").permitAll()
+                .antMatchers("/user/registration", "/static/**", "/activate/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                //TODO for Postman
+                //TODO this is just for Postman
                 .httpBasic()
 //                .formLogin()
 //                .loginPage("/login")

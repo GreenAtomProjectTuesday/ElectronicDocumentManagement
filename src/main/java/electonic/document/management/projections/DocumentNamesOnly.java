@@ -1,6 +1,5 @@
-package electonic.document.management.repository;
+package electonic.document.management.projections;
 
-//TODO where to put this?
 public interface DocumentNamesOnly {
 
     String getId();

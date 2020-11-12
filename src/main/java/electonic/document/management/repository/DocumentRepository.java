@@ -8,5 +8,5 @@ import java.util.List;
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     Document getDocumentByFileName(String filename);
 
-    List<DocumentNamesOnly> findAllBy();
+    <T> List<T> findAllBy(Class<T> type);
 }

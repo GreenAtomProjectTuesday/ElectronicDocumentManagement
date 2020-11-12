@@ -1,6 +1,7 @@
 package electonic.document.management.service;
 
 import electonic.document.management.model.User;
+import electonic.document.management.projections.UserTelephoneBook;
 import electonic.document.management.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,12 +39,12 @@ public class UserService implements UserDetailsService {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        user.setRegistrationDate(LocalDateTime.now());
         userRepository.save(user);
         return true;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserTelephoneBook> getAllUsers() {
+        return userRepository.findAllBy(UserTelephoneBook.class);
     }
 }

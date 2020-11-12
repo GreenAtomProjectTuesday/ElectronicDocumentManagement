@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("user")
 public class UserController {
     private final UserService userService;
     private final ObjectMapper objectMapper;
@@ -19,7 +21,8 @@ public class UserController {
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping("/registration")
+    @PostMapping("registration")
+    //TODO check for field on this level or frontend?
     public ResponseEntity<String> addUser(User user) {
 
         if (!userService.addUser(user)) {
@@ -28,7 +31,7 @@ public class UserController {
         return ResponseEntity.ok("user was registered");
     }
 
-    @GetMapping("/users")
+    @GetMapping("phonebook")
     public ResponseEntity<String> getAllUsers() throws JsonProcessingException {
         return ResponseEntity.ok(objectMapper.writeValueAsString(userService.getAllUsers()));
     }

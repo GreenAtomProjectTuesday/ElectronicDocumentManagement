@@ -1,5 +1,7 @@
 package electonic.document.management.service;
 
+import electonic.document.management.model.Department;
+import electonic.document.management.model.Role;
 import electonic.document.management.model.User;
 import electonic.document.management.projections.UserTelephoneBook;
 import electonic.document.management.repository.UserRepository;
@@ -10,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -44,7 +47,21 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public void addUserToDepartment(Department department, User user) {
+        user.setDepartment(department);
+        userRepository.save(user);
+    }
+
     public List<UserTelephoneBook> getAllUsers() {
         return userRepository.findAllBy(UserTelephoneBook.class);
+    }
+
+    public List<User> getUsersByIds(Long[] user_ids) {
+        return userRepository.findAllById(Arrays.asList(user_ids));
+    }
+
+    public void setUserRole(Role role, User user) {
+        user.getRoleSet().add(role);
+        userRepository.save(user);
     }
 }

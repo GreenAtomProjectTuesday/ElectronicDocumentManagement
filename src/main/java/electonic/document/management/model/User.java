@@ -81,9 +81,17 @@ public class User implements UserDetails {
         this.telephoneNumber = telephoneNumber;
     }
 
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return getRoleSet();
     }
 
     public void setPassword(String password) {

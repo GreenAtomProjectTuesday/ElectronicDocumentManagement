@@ -1,6 +1,7 @@
 package electonic.document.management.service;
 
 import electonic.document.management.model.Document;
+import electonic.document.management.model.User;
 import electonic.document.management.projections.DocumentNamesOnly;
 import electonic.document.management.repository.DocumentRepository;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,15 @@ public class DocumentService {
         this.documentRepository = documentRepository;
     }
 
-    public boolean addDocument(Document document) {
+    public boolean addDocument(Document document, User user) {
         Document documentFromDb = documentRepository.getDocumentByFileName(document.getFileName());
 
         if (documentFromDb != null) {
             return false;
         }
         document.setCreationDate(LocalDateTime.now());
+        document.setOwner(user);
+
         documentRepository.save(document);
         return true;
     }

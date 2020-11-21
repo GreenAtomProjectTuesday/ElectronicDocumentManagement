@@ -1,6 +1,9 @@
 package electonic.document.management.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +13,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "documents")
+@JsonIdentityInfo(
+        property = "id",
+        generator = ObjectIdGenerators.PropertyGenerator.class
+)
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,8 +27,8 @@ public class Document {
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationDate;
-    // TODO FetchType Lazy?
     @ManyToOne
+    @JoinColumn(name = "task_id")
     private Task task;
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,6 +36,8 @@ public class Document {
 
     @OneToMany(mappedBy = "document")
     private List<DocumentAttribute> attribute;
+    //TODO replace this with smth else
+    @JsonIgnore
     private byte[] content;
 
     public Long getId() {

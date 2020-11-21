@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,9 +60,30 @@ public class TaskController {
         return ResponseEntity.ok("Curators were successfully set");
     }
 
+    @PostMapping("edit")
+    //TODO edit expiry date
+    public ResponseEntity<String> editTask(@RequestParam("task_id") Task task,
+                                           @RequestParam(name = "task_name") String task_name) {
+        taskService.editTask(task, task_name);
+        return ResponseEntity.ok("Task was successfully edited");
+    }
+
+    @PostMapping("review")
+    public ResponseEntity<String> reviewTask(@RequestParam("task_id") Task task){
+        taskService.sendTaskToReview(task);
+        return ResponseEntity.ok("Task was marked as ready to review");
+    }
+
+    @GetMapping("print")
+    public ResponseEntity<String> printTask(@RequestParam("task_id") Task task) throws JsonProcessingException {
+        return ResponseEntity.ok(objectMapper.writeValueAsString(task));
+    }
+
     @GetMapping("getAll")
     public ResponseEntity<String> getAllTasks() throws JsonProcessingException {
         List<Task> allTasks = taskService.getAllTasks();
         return ResponseEntity.ok(objectMapper.writeValueAsString(allTasks));
     }
+
+    //TODO method set expiry date
 }

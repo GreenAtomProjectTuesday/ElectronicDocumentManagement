@@ -29,6 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
+                //TODO replace with mvcMatcher?
                 .antMatchers("/user/registration", "/static/**", "/activate/*").permitAll()
                 .anyRequest().authenticated()
                 .and()

@@ -15,9 +15,9 @@ public class DocumentAttribute {
 
     @ManyToOne
     @JoinColumn
-    private Attribute attribute;
+    private AttributeValue attributeValue;
 
-    private String value;
+    private String attributeName;
 
     public Document getDocument() {
         return document;
@@ -27,19 +27,19 @@ public class DocumentAttribute {
         this.document = document;
     }
 
-    public Attribute getAttribute() {
-        return attribute;
+    public AttributeValue getAttributeValue() {
+        return attributeValue;
     }
 
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
+    public void setAttributeValue(AttributeValue attributeValue) {
+        this.attributeValue = attributeValue;
     }
 
-    public String getValue() {
-        return value;
+    public String getAttributeName() {
+        return attributeName;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setAttributeName(String value) {
+        this.attributeName = value;
     }
 }

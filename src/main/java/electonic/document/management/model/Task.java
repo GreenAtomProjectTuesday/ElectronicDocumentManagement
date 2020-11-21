@@ -1,6 +1,8 @@
 package electonic.document.management.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,11 +11,16 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tasks")
+@JsonIdentityInfo(
+        property = "id",
+        generator = ObjectIdGenerators.PropertyGenerator.class
+)
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String taskName;
+    private String taskDescription;
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -21,6 +28,8 @@ public class Task {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime expiryDate;
+
+    private boolean readyToReview = false;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
@@ -41,6 +50,7 @@ public class Task {
     private List<User> performers;
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents;
+
 
     public Long getId() {
         return id;
@@ -129,4 +139,19 @@ public class Task {
                 '}';
     }
 
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
+    }
+
+    public boolean isReadyToReview() {
+        return readyToReview;
+    }
+
+    public void setReadyToReview(boolean readyToReview) {
+        this.readyToReview = readyToReview;
+    }
 }

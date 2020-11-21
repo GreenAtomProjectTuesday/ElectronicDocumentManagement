@@ -2,7 +2,6 @@ package electonic.document.management.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.Document;
-import electonic.document.management.model.DocumentAttribute;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,8 +17,7 @@ public class DocumentUtils {
     }
 
     // TODO improve this
-    public Document fileToDocument(MultipartFile file) throws IOException {
-        Document document = new Document();
+    public void fileToDocument(Document document, MultipartFile file) throws IOException {
 
         document.setFileName(file.getOriginalFilename());
         document.setFileType(file.getContentType());
@@ -27,8 +25,6 @@ public class DocumentUtils {
 
 
         document.setContent(file.getBytes());
-
-        return document;
     }
 
 }

@@ -45,4 +45,13 @@ public class TaskService {
             taskRepository.save(task);
         }
     }
+
+    public void editTask(Task task, String task_name) {
+        task.setTaskName(task_name);
+    }
+
+    //TODO create additional more table for ready to review tasks?
+    public void sendTaskToReview(Task task) {
+        task.setReadyToReview(true);
+    }
 }

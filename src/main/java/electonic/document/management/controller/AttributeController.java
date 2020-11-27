@@ -5,12 +5,10 @@ import electonic.document.management.model.Document;
 import electonic.document.management.service.DocumentAttributeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("attribute")
+@RequestMapping("attributes")
 public class AttributeController {
     private final DocumentAttributeService documentAttributeService;
 
@@ -18,7 +16,7 @@ public class AttributeController {
         this.documentAttributeService = documentAttributeService;
     }
 
-    @PostMapping("register")
+    @PostMapping
     public ResponseEntity<String> registerAttribute(@RequestParam("value") String attributeValue,
                                                     @RequestParam("document_id") Document document,
                                                     @RequestParam("attribute_name") String attributeName) {
@@ -28,16 +26,16 @@ public class AttributeController {
         return ResponseEntity.ok("Attribute was successfully registered");
     }
 
-    @PostMapping("edit")
+    @PatchMapping("{attribute_id}")
     public ResponseEntity<String> editAttribute(@RequestParam("new_value") String newAttributeValue,
-                                                @RequestParam("attribute_id") AttributeValue attributeValue) {
+                                                @PathVariable("attribute_id") AttributeValue attributeValue) {
         documentAttributeService.editAttributeValue(attributeValue, newAttributeValue);
         return ResponseEntity.ok("Attribute was successfully edited");
     }
 
     //TODO + delete by attribute name?
-    @PostMapping("delete")
-    public ResponseEntity<String> deleteAttribute(@RequestParam("attribute_id") Long attribute_id) {
+    @DeleteMapping("{attribute_id}")
+    public ResponseEntity<String> deleteAttribute(@PathVariable("attribute_id") Long attribute_id) {
         documentAttributeService.deleteAttribute(attribute_id);
         return ResponseEntity.ok("Attribute was successfully edited");
     }

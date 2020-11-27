@@ -9,13 +9,10 @@ import electonic.document.management.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("user")
+@RequestMapping("users")
 public class UserController {
     private final UserService userService;
     private final ObjectMapper objectMapper;
@@ -25,7 +22,7 @@ public class UserController {
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping("registration")
+    @PostMapping
     //TODO check for field on this level or frontend?
     public ResponseEntity<String> addUser(User user) {
 
@@ -35,23 +32,24 @@ public class UserController {
         return ResponseEntity.ok("user was registered");
     }
 
+    // TODO consider replacing role with roleSet
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("setRole")
+    @PostMapping("{user_id}/roles")
     public ResponseEntity<String> setRole(@RequestParam("role") Role role,
-                                          @RequestParam("user_id") User user) {
+                                          @PathVariable("user_id") User user) {
         userService.setUserRole(role, user);
         return ResponseEntity.ok("User role was successfully added!");
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("setDepartment")
-    public ResponseEntity<String> addUserToDepartment(@RequestParam("department_id") Department department,
-                                                      @RequestParam("user_id") User user) {
+    @PostMapping("{user_id}/departments/{department_id}")
+    public ResponseEntity<String> addUserToDepartment(@PathVariable("department_id") Department department,
+                                                      @PathVariable("user_id") User user) {
         userService.addUserToDepartment(department, user);
         return ResponseEntity.ok("User was successfully added to department!");
     }
 
-    @GetMapping("phonebook")
+    @GetMapping
     public ResponseEntity<String> getAllUsers() throws JsonProcessingException {
         return ResponseEntity.ok(objectMapper.writeValueAsString(userService.getAllUsers()));
     }

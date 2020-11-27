@@ -1,10 +1,12 @@
 package electonic.document.management.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.Document;
 import electonic.document.management.model.Task;
 import electonic.document.management.model.User;
+import electonic.document.management.model.Views;
 import electonic.document.management.service.DocumentService;
 import electonic.document.management.utils.DocumentUtils;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +61,8 @@ public class DocumentController {
 
     @GetMapping
     public ResponseEntity<String> getAllDocumentNames() throws JsonProcessingException {
-        return ResponseEntity.ok(objectMapper.writeValueAsString(documentService.getAllDocumentNames()));
+        return ResponseEntity.ok(objectMapper
+                .writerWithView(Views.IdName.class)
+                .writeValueAsString(documentService.getAllDocumentNames()));
     }
 }

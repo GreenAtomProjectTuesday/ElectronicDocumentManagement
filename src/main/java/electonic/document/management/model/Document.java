@@ -1,9 +1,6 @@
 package electonic.document.management.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,24 +17,32 @@ import java.util.Objects;
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.Id.class)
     private Long id;
+    @JsonView(Views.IdName.class)
     private String fileName;
+    @JsonView(Views.IdName.class)
     private String fileType;
+    @JsonView(Views.DocumentParameters.class)
     private Long size;
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonView(Views.DocumentParameters.class)
     private LocalDateTime creationDate;
     @ManyToOne
     @JoinColumn(name = "task_id")
+    @JsonView(Views.DocumentParameters.class)
     private Task task;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonView(Views.DocumentParameters.class)
     private User owner;
 
     @OneToMany(mappedBy = "document")
+    @JsonView(Views.DocumentParameters.class)
     private List<DocumentAttribute> attribute;
-    //TODO replace this with smth else
-    @JsonIgnore
+
+    @JsonView(Views.FullDocument.class)
     private byte[] content;
 
     public Long getId() {

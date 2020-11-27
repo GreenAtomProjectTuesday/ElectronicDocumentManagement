@@ -1,9 +1,11 @@
 package electonic.document.management.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.Task;
 import electonic.document.management.model.User;
+import electonic.document.management.model.Views;
 import electonic.document.management.service.TaskService;
 import electonic.document.management.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -77,13 +79,18 @@ public class TaskController {
 
     @GetMapping("{task_id}")
     public ResponseEntity<String> printTask(@PathVariable("task_id") Task task) throws JsonProcessingException {
-        return ResponseEntity.ok(objectMapper.writeValueAsString(task));
+        return ResponseEntity.ok(objectMapper
+                .writerWithView(Views.FullTask.class)
+                .writeValueAsString(task));
     }
 
     @GetMapping
+    @JsonView(Views.IdName.class)
     public ResponseEntity<String> getAllTasks() throws JsonProcessingException {
         List<Task> allTasks = taskService.getAllTasks();
-        return ResponseEntity.ok(objectMapper.writeValueAsString(allTasks));
+        return ResponseEntity.ok(objectMapper
+                .writerWithView(Views.IdName.class)
+                .writeValueAsString(allTasks));
     }
 
     //TODO method set expiry date

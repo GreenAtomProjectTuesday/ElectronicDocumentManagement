@@ -1,9 +1,6 @@
 package electonic.document.management.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,10 +11,13 @@ import java.util.Objects;
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.Id.class)
     private Long id;
+    @JsonView(Views.IdName.class)
     private String departmentName;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonView(Views.IdName.class)
     @JsonIdentityReference
     @JsonIdentityInfo(
             property = "id",

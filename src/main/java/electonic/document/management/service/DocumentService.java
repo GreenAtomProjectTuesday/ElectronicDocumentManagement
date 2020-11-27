@@ -40,9 +40,8 @@ public class DocumentService {
         return true;
     }
 
-    //TODO replace with view?
-    public List<DocumentNamesOnly> getAllDocumentNames() {
-        return documentRepository.findAllBy(DocumentNamesOnly.class);
+    public List<Document> getAllDocumentNames() {
+        return documentRepository.findAll();
     }
 
     // TODO add exception for optional handling?

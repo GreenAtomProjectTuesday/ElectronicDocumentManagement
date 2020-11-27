@@ -1,10 +1,12 @@
 package electonic.document.management.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.Department;
 import electonic.document.management.model.Role;
 import electonic.document.management.model.User;
+import electonic.document.management.model.Views;
 import electonic.document.management.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,6 +53,8 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<String> getAllUsers() throws JsonProcessingException {
-        return ResponseEntity.ok(objectMapper.writeValueAsString(userService.getAllUsers()));
+        return ResponseEntity.ok(objectMapper
+                .writerWithView(Views.IdName.class)
+                .writeValueAsString(userService.getAllUsers()));
     }
 }

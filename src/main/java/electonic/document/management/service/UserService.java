@@ -52,8 +52,8 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public List<UserTelephoneBook> getAllUsers() {
-        return userRepository.findAllBy(UserTelephoneBook.class);
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public List<User> getUsersByIds(Long[] user_ids) {

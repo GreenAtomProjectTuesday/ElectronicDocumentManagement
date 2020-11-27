@@ -10,15 +10,13 @@ import electonic.document.management.utils.DocumentUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 
 @Controller
+@RequestMapping("documents")
 public class DocumentController {
     private final DocumentService documentService;
     private final ObjectMapper objectMapper;
@@ -30,7 +28,7 @@ public class DocumentController {
 
     //TODO handle exception?
     //TODO add attributes
-    @PostMapping("/upload")
+    @PostMapping
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
                                              @RequestParam("task_id") Task task,
                                              @AuthenticationPrincipal User user) throws IOException {
@@ -46,20 +44,20 @@ public class DocumentController {
     }
 
     //TODO add document body to ResponseBody
-    @GetMapping("/download")
-    public ResponseEntity<String> downloadDocument(@RequestParam("id") Long id) {
+    @GetMapping("{id}")
+    public ResponseEntity<String> downloadDocument(@PathVariable("id") Long id) {
         Document document = documentService.getDocumentById(id);
         return ResponseEntity.ok("Document returned");
     }
 
-    @PostMapping("/edit")
-    public ResponseEntity<String> editDocument(@RequestParam("document_id") Document document,
+    @PatchMapping("{document_id}")
+    public ResponseEntity<String> editDocument(@PathVariable("document_id") Document document,
                                                @RequestParam("new_file") MultipartFile file) throws IOException {
         documentService.editDocument(document, file);
         return ResponseEntity.ok("Document was successfully edited");
     }
 
-    @GetMapping("/getAllDocumentNames")
+    @GetMapping
     public ResponseEntity<String> getAllDocumentNames() throws JsonProcessingException {
         return ResponseEntity.ok(objectMapper.writeValueAsString(documentService.getAllDocumentNames()));
     }

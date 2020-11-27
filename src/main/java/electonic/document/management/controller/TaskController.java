@@ -10,16 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
 
 @Controller
-@RequestMapping("task")
+@RequestMapping("tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -32,8 +29,9 @@ public class TaskController {
         this.objectMapper = objectMapper;
     }
 
+    //TODO PreAuthorize not working
     @PreAuthorize("hasAuthority('LEAD')")
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<String> createTask(Task task, @AuthenticationPrincipal User user) {
         if (!taskService.addTask(task, user)) {
             return ResponseEntity.ok("Task with this name already exists");
@@ -43,11 +41,13 @@ public class TaskController {
     }
 
     @PreAuthorize("hasAuthority('LEAD')")
-    @PostMapping("setCuratorsAndPerformers")
+    @PostMapping("{task_id}/curators/{curators_id}/performers/{performers_id}")
     // TODO can't convert Json String to Long[] by default
-    public ResponseEntity<String> setCuratorsAndPerformers(@RequestParam("task_id") Task task,
-                                                           @RequestParam(value = "curators", required = false) String curators_ids,
-                                                           @RequestParam(value = "performers", required = false) String performers_ids) throws JsonProcessingException {
+    public ResponseEntity<String> setCuratorsAndPerformers(
+            @PathVariable("task_id") Task task,
+            @PathVariable(value = "curators_id", required = false) String curators_ids,
+            @PathVariable(value = "performers_id", required = false) String performers_ids)
+            throws JsonProcessingException {
         List<User> curators = Collections.emptyList(), performers = Collections.emptyList();
         if (curators_ids != null)
             curators = userService.getUsersByIds(objectMapper.readValue(curators_ids, Long[].class));
@@ -60,26 +60,27 @@ public class TaskController {
         return ResponseEntity.ok("Curators were successfully set");
     }
 
-    @PostMapping("edit")
+    @PatchMapping("{task_id}")
     //TODO edit expiry date
-    public ResponseEntity<String> editTask(@RequestParam("task_id") Task task,
+    public ResponseEntity<String> editTask(@PathVariable("task_id") Task task,
                                            @RequestParam(name = "task_name") String task_name) {
         taskService.editTask(task, task_name);
         return ResponseEntity.ok("Task was successfully edited");
     }
 
-    @PostMapping("review")
-    public ResponseEntity<String> reviewTask(@RequestParam("task_id") Task task){
+    //TODO consider replacing
+    @PatchMapping("{task_id}/ready_to_review")
+    public ResponseEntity<String> reviewTask(@PathVariable("task_id") Task task) {
         taskService.sendTaskToReview(task);
         return ResponseEntity.ok("Task was marked as ready to review");
     }
 
-    @GetMapping("print")
-    public ResponseEntity<String> printTask(@RequestParam("task_id") Task task) throws JsonProcessingException {
+    @GetMapping("{task_id}")
+    public ResponseEntity<String> printTask(@PathVariable("task_id") Task task) throws JsonProcessingException {
         return ResponseEntity.ok(objectMapper.writeValueAsString(task));
     }
 
-    @GetMapping("getAll")
+    @GetMapping
     public ResponseEntity<String> getAllTasks() throws JsonProcessingException {
         List<Task> allTasks = taskService.getAllTasks();
         return ResponseEntity.ok(objectMapper.writeValueAsString(allTasks));

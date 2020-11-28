@@ -1,6 +1,5 @@
 package electonic.document.management.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.Document;
@@ -8,7 +7,6 @@ import electonic.document.management.model.Task;
 import electonic.document.management.model.User;
 import electonic.document.management.model.Views;
 import electonic.document.management.service.DocumentService;
-import electonic.document.management.utils.DocumentUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,7 +21,7 @@ public class DocumentController {
     private final DocumentService documentService;
     private final ObjectMapper objectMapper;
 
-    public DocumentController(DocumentService documentService, DocumentUtils documentUtils, ObjectMapper objectMapper) {
+    public DocumentController(DocumentService documentService, ObjectMapper objectMapper) {
         this.documentService = documentService;
         this.objectMapper = objectMapper;
     }

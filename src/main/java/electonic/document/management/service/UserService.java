@@ -1,9 +1,9 @@
 package electonic.document.management.service;
 
+import electonic.document.management.config.filter.FilterConstant;
 import electonic.document.management.model.Department;
 import electonic.document.management.model.Role;
 import electonic.document.management.model.User;
-import electonic.document.management.projections.UserTelephoneBook;
 import electonic.document.management.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +67,15 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public boolean deleteUser(User user, HttpServletResponse response, User currentUser) {
+        if (user.equals(currentUser)) {
+            userRepository.delete(user);
+            Cookie cookie = new Cookie(FilterConstant.COOKIE_NAME, "");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+            return true;
+        }
+
+        return false;
     }
 }

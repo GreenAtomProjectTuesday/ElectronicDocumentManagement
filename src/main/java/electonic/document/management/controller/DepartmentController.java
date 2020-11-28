@@ -9,9 +9,7 @@ import electonic.document.management.service.DepartmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("departments")
@@ -42,4 +40,11 @@ public class DepartmentController {
                 .writerWithView(Views.IdName.class)
                 .writeValueAsString(departmentService.getAllDepartments()));
     }
+
+    @DeleteMapping("{department_id}")
+    public ResponseEntity<String> deleteDepartments(@PathVariable("department_id") Department department) {
+        departmentService.deleteDepartment(department);
+        return ResponseEntity.ok("department was successfully deleted");
+    }
+
 }

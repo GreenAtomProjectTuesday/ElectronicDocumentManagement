@@ -39,11 +39,9 @@
 * 2-3 Возможность точечного управления правами доступа пользователей
 
 ## Нефункциональные требования:
+* RESTful
 * Java 8-11 (Liberica JDK)
-* Spring boot
-* Spring Data 
-* Spring Web
-* Spring Security
+* Spring boot, Spring Data, Spring Web, Spring Security
 * Postgres
 * Gradle (?)
 * Docker

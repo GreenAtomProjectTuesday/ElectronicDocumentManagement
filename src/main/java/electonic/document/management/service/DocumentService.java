@@ -54,4 +54,8 @@ public class DocumentService {
         documentUtils.fileToDocument(document, file);
         documentRepository.save(document);
     }
+
+    public void deleteDocument(Document document) {
+        documentRepository.delete(document);
+    }
 }

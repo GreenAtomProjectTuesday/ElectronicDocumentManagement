@@ -5,6 +5,7 @@ import electonic.document.management.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DepartmentService {
@@ -29,5 +30,9 @@ public class DepartmentService {
 
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
+    }
+
+    public void deleteDepartment(Department department_id) {
+        departmentRepository.delete(department_id);
     }
 }

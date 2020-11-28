@@ -65,4 +65,10 @@ public class DocumentController {
                 .writerWithView(Views.IdName.class)
                 .writeValueAsString(documentService.getAllDocumentNames()));
     }
+
+    @DeleteMapping("{document_id}")
+    public ResponseEntity<String> deleteDocument(@PathVariable("document_id") Document document) {
+        documentService.deleteDocument(document);
+        return ResponseEntity.ok("Document was successfully deleted");
+    }
 }

@@ -64,4 +64,8 @@ public class UserService implements UserDetailsService {
         user.getRoleSet().add(role);
         userRepository.save(user);
     }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 }

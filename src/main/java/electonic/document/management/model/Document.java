@@ -38,7 +38,7 @@ public class Document {
     @JsonView(Views.DocumentParameters.class)
     private User owner;
 
-    @OneToMany(mappedBy = "document")
+    @OneToMany(mappedBy = "document", cascade = CascadeType.REMOVE)
     @JsonView(Views.DocumentParameters.class)
     private List<DocumentAttribute> attribute;
 

@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @JsonView(Views.FullProfile.class)
     private Department department;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Role.class ,fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @JsonView(Views.IdNameRoles.class)

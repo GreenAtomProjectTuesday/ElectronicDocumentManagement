@@ -42,7 +42,7 @@ public class Task {
     @JsonView(Views.FullTask.class)
     @JoinColumn(name = "creator_id")
     private User creator;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonView(Views.FullTask.class)
     @JoinTable(
             name = "task_curators",
@@ -50,7 +50,7 @@ public class Task {
             inverseJoinColumns = {@JoinColumn(name = "curator_id")}
     )
     private List<User> curators;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonView(Views.FullTask.class)
     @JoinTable(
             name = "task_performers",

@@ -93,5 +93,11 @@ public class TaskController {
                 .writeValueAsString(allTasks));
     }
 
+    @DeleteMapping("{task_id}")
+    public ResponseEntity<String> deleteTask(@PathVariable("task_id") Task task) {
+        taskService.deleteTask(task);
+        return ResponseEntity.ok("Task was successfully deleted");
+    }
+
     //TODO method set expiry date
 }

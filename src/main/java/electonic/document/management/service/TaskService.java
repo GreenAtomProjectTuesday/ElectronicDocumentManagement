@@ -54,4 +54,8 @@ public class TaskService {
     public void sendTaskToReview(Task task) {
         task.setReadyToReview(true);
     }
+
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
+    }
 }

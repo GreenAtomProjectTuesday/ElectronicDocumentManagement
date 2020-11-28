@@ -16,7 +16,7 @@ public class Department {
     @JsonView(Views.IdName.class)
     private String departmentName;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonView(Views.IdName.class)
     @JsonIdentityReference
     @JsonIdentityInfo(

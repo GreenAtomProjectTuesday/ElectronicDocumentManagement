@@ -13,7 +13,7 @@ public class DocumentAttribute {
     @JoinColumn
     private Document document;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn
     private AttributeValue attributeValue;
 

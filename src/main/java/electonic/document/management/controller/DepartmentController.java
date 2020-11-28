@@ -1,6 +1,5 @@
 package electonic.document.management.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.Department;

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static electonic.document.management.config.filter.FilterConstants.*;
+import static electonic.document.management.config.filter.FilterConstant.*;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 

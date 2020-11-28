@@ -10,10 +10,8 @@ import java.io.IOException;
 @Component
 public class DocumentUtils {
 
-    private final ObjectMapper objectMapper;
+    public DocumentUtils() {
 
-    public DocumentUtils(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
     }
 
     // TODO improve this

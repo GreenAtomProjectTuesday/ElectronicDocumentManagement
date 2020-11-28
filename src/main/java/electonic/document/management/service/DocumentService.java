@@ -3,7 +3,6 @@ package electonic.document.management.service;
 import electonic.document.management.model.Document;
 import electonic.document.management.model.Task;
 import electonic.document.management.model.User;
-import electonic.document.management.projections.DocumentNamesOnly;
 import electonic.document.management.repository.DocumentRepository;
 import electonic.document.management.utils.DocumentUtils;
 import org.springframework.stereotype.Service;

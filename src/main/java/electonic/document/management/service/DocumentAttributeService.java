@@ -1,8 +1,8 @@
 package electonic.document.management.service;
 
-import electonic.document.management.model.AttributeValue;
-import electonic.document.management.model.Document;
-import electonic.document.management.model.DocumentAttribute;
+import electonic.document.management.model.document.AttributeValue;
+import electonic.document.management.model.document.Document;
+import electonic.document.management.model.document.DocumentAttribute;
 import electonic.document.management.repository.AttributeValueRepository;
 import electonic.document.management.repository.DocumentAttributeRepository;
 import org.springframework.stereotype.Service;

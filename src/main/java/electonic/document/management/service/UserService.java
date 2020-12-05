@@ -15,6 +15,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -62,9 +63,14 @@ public class UserService implements UserDetailsService {
         return userRepository.findAllById(Arrays.asList(user_ids));
     }
 
-    public void setUserRole(Role role, User user) {
+    public boolean setUserRole(Role role, User user) {
+        if (user == null) {
+            return false;
+        }
+
         user.getRoleSet().add(role);
         userRepository.save(user);
+        return true;
     }
 
     public boolean deleteUser(User user, HttpServletResponse response, User currentUser) {

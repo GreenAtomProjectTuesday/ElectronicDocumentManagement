@@ -2,6 +2,8 @@ package electonic.document.management.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,18 +15,25 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Id.class)
     private Long id;
+
     @JsonView(Views.IdName.class)
     private String username;
+
     private String password;
+
     @JsonView(Views.FullProfile.class)
     private String email;
+
     @JsonView(Views.FullProfile.class)
     private String telephoneNumber;
+
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonView(Views.FullProfile.class)
@@ -34,76 +43,20 @@ public class User implements UserDetails {
     @JsonView(Views.FullProfile.class)
     private Department department;
 
-    @ElementCollection(targetClass = Role.class ,fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @JsonView(Views.IdNameRoles.class)
     private Set<Role> roleSet;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String name) {
-        this.username = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Set<Role> getRoleSet() {
-        return roleSet;
-    }
-
-    public void setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
-    }
-
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public String getTelephoneNumber() {
-        return telephoneNumber;
-    }
-
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoleSet();
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override

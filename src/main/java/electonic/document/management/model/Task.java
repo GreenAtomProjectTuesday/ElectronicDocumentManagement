@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import electonic.document.management.model.document.Document;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,13 +19,17 @@ import java.util.Objects;
         property = "id",
         generator = ObjectIdGenerators.PropertyGenerator.class
 )
+@Getter
+@Setter
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Id.class)
     private Long id;
+
     @JsonView(Views.IdName.class)
     private String taskName;
+
     @JsonView(Views.FullClass.class)
     private String taskDescription;
 
@@ -43,6 +49,7 @@ public class Task {
     @JsonView(Views.FullClass.class)
     @JoinColumn(name = "creator_id")
     private User creator;
+
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonView(Views.FullClass.class)
     @JoinTable(
@@ -51,6 +58,7 @@ public class Task {
             inverseJoinColumns = {@JoinColumn(name = "curator_id")}
     )
     private List<User> curators;
+
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonView(Views.FullClass.class)
     @JoinTable(
@@ -59,74 +67,10 @@ public class Task {
             inverseJoinColumns = {@JoinColumn(name = "performer_id")}
     )
     private List<User> performers;
+
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonView(Views.FullClass.class)
     private List<Document> documents;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
-    public List<User> getCurators() {
-        return curators;
-    }
-
-    public void setCurators(List<User> curators) {
-        this.curators = curators;
-    }
-
-    public List<User> getPerformers() {
-        return performers;
-    }
-
-    public void setPerformers(List<User> performers) {
-        this.performers = performers;
-    }
-
-    public List<Document> getDocuments() {
-        return documents;
-    }
-
-    public void setDocuments(List<Document> documents) {
-        this.documents = documents;
-    }
-
-    public LocalDateTime getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(LocalDateTime expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -149,21 +93,5 @@ public class Task {
                 ", taskName='" + taskName + '\'' +
                 ", creationDate=" + creationDate +
                 '}';
-    }
-
-    public String getTaskDescription() {
-        return taskDescription;
-    }
-
-    public void setTaskDescription(String taskDescription) {
-        this.taskDescription = taskDescription;
-    }
-
-    public boolean isReadyToReview() {
-        return readyToReview;
-    }
-
-    public void setReadyToReview(boolean readyToReview) {
-        this.readyToReview = readyToReview;
     }
 }

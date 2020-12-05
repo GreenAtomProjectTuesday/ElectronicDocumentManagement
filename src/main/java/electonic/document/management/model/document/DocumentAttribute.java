@@ -2,11 +2,15 @@ package electonic.document.management.model.document;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import electonic.document.management.model.Views;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "document_attributes")
+@Getter
+@Setter
 public class DocumentAttribute {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,28 +29,4 @@ public class DocumentAttribute {
 
     @JsonView(Views.IdName.class)
     private String attributeName;
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
-    }
-
-    public AttributeValue getAttributeValue() {
-        return attributeValue;
-    }
-
-    public void setAttributeValue(AttributeValue attributeValue) {
-        this.attributeValue = attributeValue;
-    }
-
-    public String getAttributeName() {
-        return attributeName;
-    }
-
-    public void setAttributeName(String value) {
-        this.attributeName = value;
-    }
 }

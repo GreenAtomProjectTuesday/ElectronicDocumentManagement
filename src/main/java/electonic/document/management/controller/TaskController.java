@@ -34,7 +34,7 @@ public class TaskController {
     //TODO PreAuthorize not working
     @PreAuthorize("hasAuthority('LEAD')")
     @PostMapping
-    public ResponseEntity<String> createTask(Task task, @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> createTask(Task task, @AuthenticationPrincipal User user) {
         if (!taskService.addTask(task, user)) {
             return ResponseEntity.ok("Task with this name already exists");
         }
@@ -43,12 +43,12 @@ public class TaskController {
     }
 
     @PreAuthorize("hasAuthority('LEAD')")
-    @PostMapping("{task_id}/curators/{curators_id}/performers/{performers_id}")
+    @PostMapping("{task_id}/curators/performers/")
     // TODO can't convert Json String to Long[] by default
-    public ResponseEntity<String> setCuratorsAndPerformers(
+    public ResponseEntity<?> setCuratorsAndPerformers(
             @PathVariable("task_id") Task task,
-            @PathVariable(value = "curators_id", required = false) String curators_ids,
-            @PathVariable(value = "performers_id", required = false) String performers_ids)
+            @RequestParam(value = "curators_id", required = false) String curators_ids,
+            @RequestParam(value = "performers_id", required = false) String performers_ids)
             throws JsonProcessingException {
         List<User> curators = Collections.emptyList(), performers = Collections.emptyList();
         if (curators_ids != null)
@@ -63,30 +63,30 @@ public class TaskController {
     }
 
     @PatchMapping("{task_id}")
-    //TODO edit expiry date
-    public ResponseEntity<String> editTask(@PathVariable("task_id") Task task,
-                                           @RequestParam(name = "task_name") String task_name) {
+    //TODO edit expiry date and description
+    public ResponseEntity<?> editTask(@PathVariable("task_id") Task task,
+                                           @RequestParam("task_name") String task_name) {
         taskService.editTask(task, task_name);
         return ResponseEntity.ok("Task was successfully edited");
     }
 
     //TODO consider replacing
     @PatchMapping("{task_id}/ready_to_review")
-    public ResponseEntity<String> reviewTask(@PathVariable("task_id") Task task) {
+    public ResponseEntity<?> reviewTask(@PathVariable("task_id") Task task) {
         taskService.sendTaskToReview(task);
         return ResponseEntity.ok("Task was marked as ready to review");
     }
 
     @GetMapping("{task_id}")
-    public ResponseEntity<String> printTask(@PathVariable("task_id") Task task) throws JsonProcessingException {
+    public ResponseEntity<?> printTask(@PathVariable("task_id") Task task) throws JsonProcessingException {
         return ResponseEntity.ok(objectMapper
-                .writerWithView(Views.FullTask.class)
+                .writerWithView(Views.FullClass.class)
                 .writeValueAsString(task));
     }
 
     @GetMapping
     @JsonView(Views.IdName.class)
-    public ResponseEntity<String> getAllTasks() throws JsonProcessingException {
+    public ResponseEntity<?> getAllTasks() throws JsonProcessingException {
         List<Task> allTasks = taskService.getAllTasks();
         return ResponseEntity.ok(objectMapper
                 .writerWithView(Views.IdName.class)
@@ -94,7 +94,7 @@ public class TaskController {
     }
 
     @DeleteMapping("{task_id}")
-    public ResponseEntity<String> deleteTask(@PathVariable("task_id") Task task) {
+    public ResponseEntity<?> deleteTask(@PathVariable("task_id") Task task) {
         taskService.deleteTask(task);
         return ResponseEntity.ok("Task was successfully deleted");
     }

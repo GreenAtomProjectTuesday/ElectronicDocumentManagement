@@ -1,7 +1,7 @@
 package electonic.document.management.controller;
 
-import electonic.document.management.model.AttributeValue;
-import electonic.document.management.model.Document;
+import electonic.document.management.model.document.AttributeValue;
+import electonic.document.management.model.document.Document;
 import electonic.document.management.service.DocumentAttributeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ public class AttributeController {
     }
 
     @PostMapping
-    public ResponseEntity<String> registerAttribute(@RequestParam("value") String attributeValue,
+    public ResponseEntity<?> registerAttribute(@RequestParam("value") String attributeValue,
                                                     @RequestParam("document_id") Document document,
                                                     @RequestParam("attribute_name") String attributeName) {
         if (!documentAttributeService.registerAttribute(attributeName, document, attributeValue)) {
@@ -27,7 +27,7 @@ public class AttributeController {
     }
 
     @PatchMapping("{attribute_id}")
-    public ResponseEntity<String> editAttribute(@RequestParam("new_value") String newAttributeValue,
+    public ResponseEntity<?> editAttribute(@RequestParam("new_value") String newAttributeValue,
                                                 @PathVariable("attribute_id") AttributeValue attributeValue) {
         documentAttributeService.editAttributeValue(attributeValue, newAttributeValue);
         return ResponseEntity.ok("Attribute was successfully edited");
@@ -35,8 +35,8 @@ public class AttributeController {
 
     //TODO + delete by attribute name?
     @DeleteMapping("{attribute_id}")
-    public ResponseEntity<String> deleteAttribute(@PathVariable("attribute_id") Long attribute_id) {
+    public ResponseEntity<?> deleteAttribute(@PathVariable("attribute_id") Long attribute_id) {
         documentAttributeService.deleteAttribute(attribute_id);
-        return ResponseEntity.ok("Attribute was successfully edited");
+        return ResponseEntity.ok("Attribute was successfully deleted");
     }
 }

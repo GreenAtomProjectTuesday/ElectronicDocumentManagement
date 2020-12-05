@@ -1,6 +1,12 @@
-package electonic.document.management.model;
+package electonic.document.management.model.document;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import electonic.document.management.model.Task;
+import electonic.document.management.model.User;
+import electonic.document.management.model.Views;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -37,6 +43,11 @@ public class Document {
     @JoinColumn(name = "user_id")
     @JsonView(Views.DocumentParameters.class)
     private User owner;
+
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
+    @OrderColumn
+    @JsonView(Views.DocumentParameters.class)
+    private List<DocumentState> documentStates;
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.REMOVE)
     @JsonView(Views.DocumentParameters.class)
@@ -115,6 +126,14 @@ public class Document {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public List<DocumentState> getDocumentStates() {
+        return documentStates;
+    }
+
+    public void setDocumentStates(List<DocumentState> documentStates) {
+        this.documentStates = documentStates;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package electonic.document.management.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import electonic.document.management.model.Document;
+import electonic.document.management.model.document.Document;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

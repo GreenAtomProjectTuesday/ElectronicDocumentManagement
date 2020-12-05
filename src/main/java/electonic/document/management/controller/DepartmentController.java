@@ -24,7 +24,7 @@ public class DepartmentController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<String> createDepartment(Department department) {
+    public ResponseEntity<?> createDepartment(Department department) {
 
         if (!departmentService.addDepartment(department)) {
             return ResponseEntity.ok("Department already exists!");
@@ -34,14 +34,14 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public ResponseEntity<String> getAllDepartments() throws JsonProcessingException {
+    public ResponseEntity<?> getAllDepartments() throws JsonProcessingException {
         return ResponseEntity.ok(objectMapper
                 .writerWithView(Views.IdName.class)
                 .writeValueAsString(departmentService.getAllDepartments()));
     }
 
     @DeleteMapping("{department_id}")
-    public ResponseEntity<String> deleteDepartments(@PathVariable("department_id") Department department) {
+    public ResponseEntity<?> deleteDepartments(@PathVariable("department_id") Department department) {
         departmentService.deleteDepartment(department);
         return ResponseEntity.ok("department was successfully deleted");
     }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
     @GetMapping("/")
-    public ResponseEntity<String> main() {
+    public ResponseEntity<?> main() {
         return ResponseEntity.ok("This is the main page. if you can see this that means you are logged in");
     }
 }

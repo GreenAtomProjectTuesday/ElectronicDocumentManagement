@@ -20,6 +20,6 @@ public class Views {
     public interface FullDocument extends DocumentParameters {
     }
 
-    public interface FullTask extends IdName {
+    public interface FullClass extends IdName {
     }
 }

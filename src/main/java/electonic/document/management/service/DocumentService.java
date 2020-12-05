@@ -1,8 +1,9 @@
 package electonic.document.management.service;
 
-import electonic.document.management.model.Document;
+import electonic.document.management.model.document.Document;
 import electonic.document.management.model.Task;
 import electonic.document.management.model.User;
+import electonic.document.management.model.document.DocumentState;
 import electonic.document.management.repository.DocumentRepository;
 import electonic.document.management.utils.DocumentUtils;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,20 +25,18 @@ public class DocumentService {
         this.documentUtils = documentUtils;
     }
 
-    public boolean addDocument(MultipartFile file, User user, Task task) throws IOException {
+    public Document createDocument(MultipartFile file, User user, Task task) throws IOException {
         Document document = new Document();
         documentUtils.fileToDocument(document, file);
         Document documentFromDb = documentRepository.getDocumentByFileName(document.getFileName());
 
-        if (documentFromDb != null) {
-            return false;
-        }
+        //TODO exception documentFromDb!=null
         document.setCreationDate(LocalDateTime.now());
         document.setOwner(user);
         document.setTask(task);
+        document.setDocumentStates(new LinkedList<>());
 
-        documentRepository.save(document);
-        return true;
+        return document;
     }
 
     public List<Document> getAllDocumentNames() {
@@ -49,12 +49,18 @@ public class DocumentService {
         return document.get();
     }
 
-    public void editDocument(Document document, MultipartFile file) throws IOException {
+    public void editDocument(Document document, MultipartFile file, DocumentState documentState) throws IOException {
         documentUtils.fileToDocument(document, file);
+        document.getDocumentStates().add(documentState);
         documentRepository.save(document);
     }
 
     public void deleteDocument(Document document) {
         documentRepository.delete(document);
+    }
+
+
+    public void saveDocument(Document document) {
+        documentRepository.save(document);
     }
 }

@@ -1,6 +1,8 @@
 package electonic.document.management.model;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -8,11 +10,14 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "departments")
+@Getter
+@Setter
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Id.class)
     private Long id;
+
     @JsonView(Views.IdName.class)
     private String departmentName;
 
@@ -24,30 +29,6 @@ public class Department {
             generator = ObjectIdGenerators.PropertyGenerator.class
     )
     private List<User> departmentStaff;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-
-    public List<User> getDepartmentStaff() {
-        return departmentStaff;
-    }
-
-    public void setDepartmentStaff(List<User> departmentStaff) {
-        this.departmentStaff = departmentStaff;
-    }
 
     @Override
     public boolean equals(Object o) {

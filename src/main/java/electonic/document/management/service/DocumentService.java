@@ -2,7 +2,7 @@ package electonic.document.management.service;
 
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.Task;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.User;
 import electonic.document.management.model.document.DocumentState;
 import electonic.document.management.repository.DocumentRepository;
 import electonic.document.management.utils.DocumentUtils;
@@ -28,7 +28,7 @@ public class DocumentService {
     public Document createDocument(MultipartFile file, User user, Task task) throws IOException {
         Document document = new Document();
         documentUtils.fileToDocument(document, file);
-        Document documentFromDb = documentRepository.getDocumentByFileName(document.getFileName());
+        Document documentFromDb = documentRepository.getDocumentByName(document.getName());
 
         //TODO exception documentFromDb!=null
         document.setCreationDate(LocalDateTime.now());

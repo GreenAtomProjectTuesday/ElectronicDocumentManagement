@@ -2,7 +2,7 @@ package electonic.document.management.service;
 
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.document.DocumentState;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.User;
 import electonic.document.management.repository.DocumentStateRepository;
 import org.springframework.stereotype.Service;
 

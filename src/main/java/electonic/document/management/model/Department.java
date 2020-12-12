@@ -1,6 +1,8 @@
 package electonic.document.management.model;
 
 import com.fasterxml.jackson.annotation.*;
+import electonic.document.management.model.user.DepartmentEmployee;
+import electonic.document.management.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "departments")
+@Table(name = "department")
 @Getter
 @Setter
 public class Department {
@@ -19,7 +21,7 @@ public class Department {
     private Long id;
 
     @JsonView(Views.IdName.class)
-    private String departmentName;
+    private String name;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonView(Views.IdName.class)
@@ -28,7 +30,7 @@ public class Department {
             property = "id",
             generator = ObjectIdGenerators.PropertyGenerator.class
     )
-    private List<User> departmentStaff;
+    private List<DepartmentEmployee> departmentStaff;
 
     @Override
     public boolean equals(Object o) {
@@ -47,7 +49,7 @@ public class Department {
     public String toString() {
         return "Department{" +
                 "id=" + id +
-                ", departmentName='" + departmentName + '\'' +
+                ", departmentName='" + name + '\'' +
                 ", departmentStaff=" + departmentStaff +
                 '}';
     }

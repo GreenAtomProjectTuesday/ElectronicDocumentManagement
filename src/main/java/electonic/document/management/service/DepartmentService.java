@@ -16,7 +16,7 @@ public class DepartmentService {
     }
 
     public boolean addDepartment(Department department) {
-        Department departmentFromDb = departmentRepository.getDepartmentByDepartmentName(department.getDepartmentName());
+        Department departmentFromDb = departmentRepository.getDepartmentByName(department.getName());
 
         if (departmentFromDb != null) {
             return false;

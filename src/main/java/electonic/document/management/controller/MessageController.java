@@ -1,7 +1,7 @@
 package electonic.document.management.controller;
 
 import electonic.document.management.model.Message;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.User;
 import electonic.document.management.service.MessageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

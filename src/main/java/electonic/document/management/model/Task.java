@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import electonic.document.management.model.document.Document;
+import electonic.document.management.model.user.TaskEmployee;
+import electonic.document.management.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tasks")
+@Table(name = "task")
 @JsonIdentityInfo(
         property = "id",
         generator = ObjectIdGenerators.PropertyGenerator.class
@@ -28,7 +30,7 @@ public class Task {
     private Long id;
 
     @JsonView(Views.IdName.class)
-    private String taskName;
+    private String name;
 
     @JsonView(Views.FullClass.class)
     private String taskDescription;
@@ -45,28 +47,14 @@ public class Task {
     @JsonView(Views.FullClass.class)
     private boolean readyToReview = false;
 
-    @ManyToOne
-    @JsonView(Views.FullClass.class)
-    @JoinColumn(name = "creator_id")
-    private User creator;
-
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonView(Views.FullClass.class)
     @JoinTable(
-            name = "task_curators",
+            name = "task_employee_list",
             joinColumns = {@JoinColumn(name = "task_id")},
-            inverseJoinColumns = {@JoinColumn(name = "curator_id")}
+            inverseJoinColumns = {@JoinColumn(name = "task_employee_id")}
     )
-    private List<User> curators;
-
-    @ManyToMany(cascade = CascadeType.REMOVE)
-    @JsonView(Views.FullClass.class)
-    @JoinTable(
-            name = "task_performers",
-            joinColumns = {@JoinColumn(name = "task_id")},
-            inverseJoinColumns = {@JoinColumn(name = "performer_id")}
-    )
-    private List<User> performers;
+    private List<TaskEmployee> taskEmployees;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonView(Views.FullClass.class)
@@ -90,7 +78,7 @@ public class Task {
     public String toString() {
         return "Task{" +
                 "id=" + id +
-                ", taskName='" + taskName + '\'' +
+                ", taskName='" + name + '\'' +
                 ", creationDate=" + creationDate +
                 '}';
     }

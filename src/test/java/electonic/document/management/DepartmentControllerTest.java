@@ -43,17 +43,17 @@ public class DepartmentControllerTest {
         Cookie authorizationWithAuthorities = login("1", "1");
         Cookie authorization = login("2", "2");
         this.mockMvc.perform(post("/departments")
-                .param("departmentName", "test department")
+                .param("name", "test department")
                 .cookie(authorization))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
         this.mockMvc.perform(post("/departments")
-                .param("departmentName", "test department")
+                .param("name", "test department")
                 .cookie(authorizationWithAuthorities))
                 .andDo(print())
                 .andExpect(content().string(containsString("Department already exists!")));
         this.mockMvc.perform(post("/departments")
-                .param("departmentName", "test department number 2")
+                .param("name", "test department number 2")
                 .cookie(authorizationWithAuthorities))
                 .andDo(print())
                 .andExpect(content().string(containsString("Department successfully created!")));
@@ -65,7 +65,7 @@ public class DepartmentControllerTest {
         this.mockMvc.perform(get("/departments")
                 .cookie(authorization))
                 .andDo(print())
-                .andExpect(content().string(containsString("\"id\":4,\"departmentName\":\"test department\"")));
+                .andExpect(content().string(containsString("\"id\":4,\"name\":\"test department\"")));
     }
 
     @Test

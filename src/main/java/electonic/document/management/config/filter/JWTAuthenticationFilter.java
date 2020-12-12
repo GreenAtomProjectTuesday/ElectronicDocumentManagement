@@ -3,7 +3,7 @@ package electonic.document.management.config.filter;
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

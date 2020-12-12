@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,8 +20,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.logging.Logger;
 
 import static electonic.document.management.config.filter.FilterConstant.*;
 
@@ -65,7 +63,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .forType(User.class)
                     .readValue(userJson);
             if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, user.getRoleSet());
+                return new UsernamePasswordAuthenticationToken(user, null, user.getRole());
             }
             return null;
         }

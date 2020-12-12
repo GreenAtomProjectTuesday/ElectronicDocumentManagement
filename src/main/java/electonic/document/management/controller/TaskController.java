@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.Task;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
 import electonic.document.management.service.TaskService;
 import electonic.document.management.service.UserService;

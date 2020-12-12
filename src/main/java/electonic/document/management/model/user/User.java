@@ -1,7 +1,8 @@
-package electonic.document.management.model;
+package electonic.document.management.model.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import electonic.document.management.model.Views;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,9 +15,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "`user`")
 @Getter
 @Setter
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,23 +33,16 @@ public class User implements UserDetails {
     @JsonView(Views.FullProfile.class)
     private String email;
 
-    @JsonView(Views.FullProfile.class)
-    private String telephoneNumber;
-
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonView(Views.FullProfile.class)
     private LocalDateTime registrationDate;
 
-    @ManyToOne
-    @JsonView(Views.FullProfile.class)
-    private Department department;
-
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @JsonView(Views.IdNameRoles.class)
-    private Set<Role> roleSet;
+    private Set<Role> role;
 
     @Override
     public String getUsername() {
@@ -56,7 +51,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoleSet();
+        return getRole();
     }
 
     @Override
@@ -106,7 +101,7 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", registrationDate=" + registrationDate +
-                ", roleSet=" + roleSet +
+                ", roleSet=" + role +
                 '}';
     }
 }

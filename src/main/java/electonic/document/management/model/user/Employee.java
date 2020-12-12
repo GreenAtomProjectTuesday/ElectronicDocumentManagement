@@ -1,4 +1,4 @@
-package electonic.document.management.model.document;
+package electonic.document.management.model.user;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import electonic.document.management.model.Views;
@@ -8,10 +8,10 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "attribute_value")
+@Table(name = "employee")
 @Getter
 @Setter
-public class AttributeValue {
+public class Employee extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,5 +19,8 @@ public class AttributeValue {
     private Long id;
 
     @JsonView(Views.IdName.class)
-    private String value;
+    private String fullName;
+
+    @JsonView(Views.FullProfile.class)
+    private String telephoneNumber;
 }

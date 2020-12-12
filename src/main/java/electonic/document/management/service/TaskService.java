@@ -1,7 +1,7 @@
 package electonic.document.management.service;
 
 import electonic.document.management.model.Task;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.User;
 import electonic.document.management.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +17,11 @@ public class TaskService {
     }
 
     public boolean addTask(Task task, User user) {
-        Task taskFromDb = taskRepository.getTaskByTaskName(task.getTaskName());
+        Task taskFromDb = taskRepository.getTaskByName(task.getName());
         if (taskFromDb != null) {
             return false;
         }
         task.setCreationDate(LocalDateTime.now());
-        task.setCreator(user);
 
         taskRepository.save(task);
         return true;
@@ -32,22 +31,21 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    //TODO fix this two methods and add creator
     public void setCurators(Task task, List<User> curators) {
         if (!curators.isEmpty()) {
-            task.setCurators(curators);
             taskRepository.save(task);
         }
     }
 
     public void setPerformers(Task task, List<User> performers) {
         if (!performers.isEmpty()) {
-            task.setCurators(performers);
             taskRepository.save(task);
         }
     }
 
     public void editTask(Task task, String task_name) {
-        task.setTaskName(task_name);
+        task.setName(task_name);
     }
 
     //TODO create additional more table for ready to review tasks?

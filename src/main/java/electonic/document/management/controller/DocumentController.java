@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.*;
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.document.DocumentState;
+import electonic.document.management.model.user.User;
 import electonic.document.management.service.DocumentStateService;
 import electonic.document.management.service.DocumentService;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 @RequestMapping("documents")

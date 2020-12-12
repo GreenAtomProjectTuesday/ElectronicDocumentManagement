@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import electonic.document.management.model.Task;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "documents")
+@Table(name = "document")
 @JsonIdentityInfo(
         property = "id",
         generator = ObjectIdGenerators.PropertyGenerator.class
@@ -31,7 +31,10 @@ public class Document {
     private Long id;
 
     @JsonView(Views.IdName.class)
-    private String fileName;
+    private String name;
+
+    @JsonView(Views.IdName.class)
+    private String fileUuid;
 
     @JsonView(Views.IdName.class)
     private String fileType;
@@ -63,6 +66,7 @@ public class Document {
     @JsonView(Views.DocumentParameters.class)
     private List<DocumentAttribute> attribute;
 
+    //TODO refactor to filesystem
     @JsonView(Views.FullDocument.class)
     private byte[] content;
 
@@ -83,7 +87,7 @@ public class Document {
     public String toString() {
         return "Document{" +
                 "id=" + id +
-                ", fileName='" + fileName + '\'' +
+                ", fileName='" + name + '\'' +
                 ", fileType='" + fileType + '\'' +
                 ", size=" + size +
                 ", content=" + Arrays.toString(content) +

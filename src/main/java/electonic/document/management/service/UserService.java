@@ -2,8 +2,8 @@ package electonic.document.management.service;
 
 import electonic.document.management.config.filter.FilterConstant;
 import electonic.document.management.model.Department;
-import electonic.document.management.model.Role;
-import electonic.document.management.model.User;
+import electonic.document.management.model.user.Role;
+import electonic.document.management.model.user.User;
 import electonic.document.management.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +15,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -51,7 +50,6 @@ public class UserService implements UserDetailsService {
     }
 
     public void addUserToDepartment(Department department, User user) {
-        user.setDepartment(department);
         userRepository.save(user);
     }
 
@@ -68,7 +66,7 @@ public class UserService implements UserDetailsService {
             return false;
         }
 
-        user.getRoleSet().add(role);
+        user.getRole().add(role);
         userRepository.save(user);
         return true;
     }

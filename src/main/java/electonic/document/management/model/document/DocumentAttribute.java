@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "document_attributes")
+@Table(name = "document_attribute")
 @Getter
 @Setter
 public class DocumentAttribute {
@@ -28,5 +28,5 @@ public class DocumentAttribute {
     private AttributeValue attributeValue;
 
     @JsonView(Views.IdName.class)
-    private String attributeName;
+    private String name;
 }

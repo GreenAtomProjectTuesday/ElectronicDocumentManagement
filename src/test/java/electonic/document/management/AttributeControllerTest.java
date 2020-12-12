@@ -43,7 +43,7 @@ public class AttributeControllerTest {
     public void testCreateAttribute() throws Exception {
         Cookie authorizationWithAuthorities = login("1", "1");
         this.mockMvc.perform(post("/attributes")
-                .param("attribute_name", "test attribute number 2")
+                .param("name", "test attribute number 2")
                 .param("document_id", "5")
                 .param("value", "test attribute number 2 value")
                 .cookie(authorizationWithAuthorities))

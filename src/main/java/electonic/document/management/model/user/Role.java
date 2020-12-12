@@ -1,4 +1,4 @@
-package electonic.document.management.model;
+package electonic.document.management.model.user;
 
 import org.springframework.security.core.GrantedAuthority;
 

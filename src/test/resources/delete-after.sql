@@ -1,16 +1,16 @@
 delete
-from user_roles;
+from user_role;
 delete
-from document_attributes;
+from document_attribute;
 delete
-from attribute_values;
+from attribute_value;
 delete
-from document_states;
+from document_state;
 delete
-from documents;
+from document;
 delete
-from tasks;
+from task;
 delete
-from users;
+from "user";
 delete
-from departments;
+from department;

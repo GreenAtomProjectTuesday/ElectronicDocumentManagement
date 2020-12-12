@@ -20,7 +20,7 @@ public class DocumentAttributeService {
     //TODO add transaction?
     public boolean registerAttribute(String attributeName, Document document, String attributeValueString) {
         DocumentAttribute documentAttributeFromDb = documentAttributeRepository
-                .getDocumentAttributeByAttributeName(attributeName);
+                .getDocumentAttributeByName(attributeName);
 
         if (documentAttributeFromDb != null) {
             return false;
@@ -31,7 +31,7 @@ public class DocumentAttributeService {
 
         DocumentAttribute documentAttribute = new DocumentAttribute();
         documentAttribute.setDocument(document);
-        documentAttribute.setAttributeName(attributeName);
+        documentAttribute.setName(attributeName);
         documentAttribute.setAttributeValue(attributeValue);
 
         attributeValueRepository.save(attributeValue);

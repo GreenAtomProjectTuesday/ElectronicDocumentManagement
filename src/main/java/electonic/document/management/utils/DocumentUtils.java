@@ -16,7 +16,7 @@ public class DocumentUtils {
     // TODO improve this
     public void fileToDocument(Document document, MultipartFile file) throws IOException {
 
-        document.setFileName(file.getOriginalFilename());
+        document.setName(file.getOriginalFilename());
         document.setFileType(file.getContentType());
         document.setSize(file.getSize());
 

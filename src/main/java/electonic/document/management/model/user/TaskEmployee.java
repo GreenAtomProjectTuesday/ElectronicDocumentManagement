@@ -2,6 +2,7 @@ package electonic.document.management.model.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import electonic.document.management.model.Task;
 import electonic.document.management.model.Views;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Table(name = "task_employee")
 @Getter
 @Setter
-public class TaskEmployee extends Employee {
+public class TaskEmployee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,12 +27,20 @@ public class TaskEmployee extends Employee {
     @CollectionTable(name = "task_employee_duty", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @JsonView(Views.IdNameRoles.class)
-    private Set<Duty> position;
+    private Set<Duty> duty;
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonView(Views.FullProfile.class)
     private LocalDateTime assignmentDate;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    @JsonView(Views.FullProfile.class)
+    private Employee employee;
+
+    @ManyToOne
+    private Task task;
 
     @Override
     public boolean equals(Object o) {

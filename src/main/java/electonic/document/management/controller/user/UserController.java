@@ -1,4 +1,4 @@
-package electonic.document.management.controller;
+package electonic.document.management.controller.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import electonic.document.management.model.Department;
 import electonic.document.management.model.user.Role;
 import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
-import electonic.document.management.service.UserService;
+import electonic.document.management.service.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -46,14 +46,14 @@ public class UserController {
         }
         return ResponseEntity.ok("User role was successfully added!");
     }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("{user_id}/departments/{department_id}")
-    public ResponseEntity<?> addUserToDepartment(@PathVariable("department_id") Department department,
-                                                      @PathVariable("user_id") User user) {
-        userService.addUserToDepartment(department, user);
-        return ResponseEntity.ok("User was successfully added to department!");
-    }
+//
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PostMapping("{user_id}/departments/{department_id}")
+//    public ResponseEntity<?> addUserToDepartment(@PathVariable("department_id") Department department,
+//                                                      @PathVariable("user_id") User user) {
+//        userService.addUserToDepartment(department, user);
+//        return ResponseEntity.ok("User was successfully added to department!");
+//    }
 
     @GetMapping
     public ResponseEntity<?> getAllUsers() throws JsonProcessingException {

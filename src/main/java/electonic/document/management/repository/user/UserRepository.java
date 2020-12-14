@@ -1,4 +1,4 @@
-package electonic.document.management.repository;
+package electonic.document.management.repository.user;
 
 import electonic.document.management.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

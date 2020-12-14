@@ -67,14 +67,14 @@ public class UserControllerTest {
                 .andExpect(content().string(containsString("User role was successfully added!")));
     }
 
-    @Test
-    public void testAddUserToDepartment() throws Exception {
-        Cookie authorization = login();
-        this.mockMvc.perform(post("/users/2/departments/4")
-                .cookie(authorization))
-                .andDo(print())
-                .andExpect(content().string(containsString("User was successfully added to department!")));
-    }
+//    @Test
+//    public void testAddUserToDepartment() throws Exception {
+//        Cookie authorization = login();
+//        this.mockMvc.perform(post("/users/2/departments/4")
+//                .cookie(authorization))
+//                .andDo(print())
+//                .andExpect(content().string(containsString("User was successfully added to department!")));
+//    }
 
     @Test
     public void testDeleteUser() throws Exception {

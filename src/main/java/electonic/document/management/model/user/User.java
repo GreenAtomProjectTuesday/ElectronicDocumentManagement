@@ -18,7 +18,6 @@ import java.util.Set;
 @Table(name = "`user`")
 @Getter
 @Setter
-@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,6 +42,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @JsonView(Views.IdNameRoles.class)
     private Set<Role> role;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    private Employee employee;
 
     @Override
     public String getUsername() {

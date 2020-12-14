@@ -47,13 +47,8 @@ public class Task {
     @JsonView(Views.FullClass.class)
     private boolean readyToReview = false;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     @JsonView(Views.FullClass.class)
-    @JoinTable(
-            name = "task_employee_list",
-            joinColumns = {@JoinColumn(name = "task_id")},
-            inverseJoinColumns = {@JoinColumn(name = "task_employee_id")}
-    )
     private List<TaskEmployee> taskEmployees;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

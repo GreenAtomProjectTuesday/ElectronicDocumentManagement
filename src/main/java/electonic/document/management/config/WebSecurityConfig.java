@@ -2,7 +2,7 @@ package electonic.document.management.config;
 
 import electonic.document.management.config.filter.JWTAuthenticationFilter;
 import electonic.document.management.config.filter.JWTAuthorizationFilter;
-import electonic.document.management.service.UserService;
+import electonic.document.management.service.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

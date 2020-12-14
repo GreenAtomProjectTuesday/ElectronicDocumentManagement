@@ -1,10 +1,10 @@
-package electonic.document.management.service;
+package electonic.document.management.service.user;
 
 import electonic.document.management.config.filter.FilterConstant;
-import electonic.document.management.model.Department;
+import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.Role;
 import electonic.document.management.model.user.User;
-import electonic.document.management.repository.UserRepository;
+import electonic.document.management.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -49,10 +50,6 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public void addUserToDepartment(Department department, User user) {
-        userRepository.save(user);
-    }
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -81,5 +78,21 @@ public class UserService implements UserDetailsService {
         }
 
         return false;
+    }
+
+    public void addEmployee(User user, String fullName, String phone) {
+        Employee employee = new Employee();
+        employee.setUser(user);
+        employee.setFullName(fullName);
+        employee.setPhone(phone);
+        user.setEmployee(employee);
+
+        userRepository.save(user);
+    }
+
+    //todo handle null optional
+    public User getUser(User user) {
+        Optional<User> userFromDb = userRepository.findById(user.getId());
+        return userFromDb.get();
     }
 }

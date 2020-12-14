@@ -29,7 +29,7 @@ public class DepartmentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    //TODO remove this same code in all tests
+    //TODO this same code in all tests
     public Cookie login(String username, String password) throws Exception {
         MvcResult resultActions = this.mockMvc.perform(post("/login").param("username", username)
                 .param("password", password))

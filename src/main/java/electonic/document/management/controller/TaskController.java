@@ -7,7 +7,7 @@ import electonic.document.management.model.Task;
 import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
 import electonic.document.management.service.TaskService;
-import electonic.document.management.service.UserService;
+import electonic.document.management.service.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,6 +45,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('LEAD')")
     @PostMapping("{task_id}/curators/performers/")
     // TODO can't convert Json String to Long[] by default
+    // TODO: 14.12.2020 not needed and not working, remove or edit it
     public ResponseEntity<?> setCuratorsAndPerformers(
             @PathVariable("task_id") Task task,
             @RequestParam(value = "curators_id", required = false) String curators_ids,
@@ -65,7 +66,7 @@ public class TaskController {
     @PatchMapping("{task_id}")
     //TODO edit expiry date and description
     public ResponseEntity<?> editTask(@PathVariable("task_id") Task task,
-                                           @RequestParam("task_name") String task_name) {
+                                      @RequestParam("task_name") String task_name) {
         taskService.editTask(task, task_name);
         return ResponseEntity.ok("Task was successfully edited");
     }

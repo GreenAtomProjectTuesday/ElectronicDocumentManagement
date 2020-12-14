@@ -9,7 +9,13 @@ from document_state;
 delete
 from document;
 delete
+from department_employee;
+delete
+from task_employee;
+delete
 from task;
+delete
+from employee;
 delete
 from "user";
 delete

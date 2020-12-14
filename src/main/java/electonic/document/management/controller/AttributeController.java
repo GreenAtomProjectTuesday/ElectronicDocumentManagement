@@ -19,7 +19,7 @@ public class AttributeController {
     @PostMapping
     public ResponseEntity<?> registerAttribute(@RequestParam("value") String attributeValue,
                                                     @RequestParam("document_id") Document document,
-                                                    @RequestParam("attribute_name") String attributeName) {
+                                                    @RequestParam("name") String attributeName) {
         if (!documentAttributeService.registerAttribute(attributeName, document, attributeValue)) {
             return ResponseEntity.ok("Attribute with such name already exists");
         }

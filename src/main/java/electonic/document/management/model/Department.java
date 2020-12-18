@@ -32,6 +32,15 @@ public class Department {
     )
     private List<DepartmentEmployee> departmentStaff;
 
+    private Long level;
+
+    @Column(nullable = false)
+    private Long parentId;
+
+    private Long leftKey;
+
+    private Long rightKey;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("employees")
 public class EmployeeController {
@@ -33,21 +35,20 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<?> getAllEmployees() {
-        // TODO: 14.12.2020 not implemented
+        List<Employee> allEmployees = employeeService.getAllEmployees();
         return ResponseEntity.ok("");
     }
 
     @DeleteMapping("{employee_id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable("employee_id") Employee employee) {
-        // TODO: 14.12.2020 not implemented
+        employeeService.deleteEmployee(employee);
         return ResponseEntity.ok("");
     }
 
     @PatchMapping("{employee_id}")
-    public ResponseEntity<?> editEmployee(@PathVariable("employee_id") Employee employee,
-                                          @RequestParam(name = "full_name", required = false) String newFullName,
-                                          @RequestParam(name = "phone", required = false) String phone) {
-        // TODO: 14.12.2020 not implemented
+    public ResponseEntity<?> editEmployee(@PathVariable("employee_id") Employee employeeFromDb,
+                                          @RequestBody Employee employee) {
+        employeeService.editEmployee(employee, employeeFromDb);
         return ResponseEntity.ok("");
     }
 }

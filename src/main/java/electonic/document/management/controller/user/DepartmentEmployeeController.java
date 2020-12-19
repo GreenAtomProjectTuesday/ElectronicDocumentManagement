@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("department_employees")
 public class DepartmentEmployeeController {
@@ -32,27 +34,36 @@ public class DepartmentEmployeeController {
 
     @GetMapping
     public ResponseEntity<?> getAllDepartmentEmployees() {
-        // TODO: 14.12.2020 not implemented
-        return ResponseEntity.ok("");
+        List<DepartmentEmployee> allDepartmentEmployees = departmentEmployeeService.getAllDepartmentEmployees();
+
+        if (allDepartmentEmployees.isEmpty()) {
+            return ResponseEntity.ok("There are no data in DepartmentEmployee");
+        }
+
+        return ResponseEntity.ok("DepartmentEmployee contains " + allDepartmentEmployees.size() + " items");
     }
 
     @DeleteMapping("{department_employee_id}")
     public ResponseEntity<?> deleteDepartmentEmployee(@PathVariable("department_employee_id") DepartmentEmployee employee) {
-        // TODO: 14.12.2020 not implemented
-        return ResponseEntity.ok("");
+        departmentEmployeeService.deleteDepartmentEmployee(employee);
+        return ResponseEntity.ok("Delete is success");
     }
 
     @PostMapping("{department_employee_id}/positions")
     public ResponseEntity<?> setDepartmentEmployeePosition(@PathVariable("department_employee_id") DepartmentEmployee employee,
                                                            @RequestParam("duty") Position position) {
-        // TODO: 14.12.2020 not implemented
-        return ResponseEntity.ok("");
+
+        departmentEmployeeService.setDepartmentEmployeePosition(employee, position);
+
+        return ResponseEntity.ok("Position is set");
     }
 
     @DeleteMapping("{department_employee_id}/positions/{position}")
     public ResponseEntity<?> deleteDepartmentEmployeePosition(@PathVariable("department_employee_id") DepartmentEmployee employee,
                                                               @PathVariable("position") Position position) {
-        // TODO: 14.12.2020 not implemented
+
+        departmentEmployeeService.deleteDepartmentEmployeePosition(employee, position);
+
         return ResponseEntity.ok("");
     }
 }

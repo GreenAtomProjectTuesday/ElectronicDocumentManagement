@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("task_employees")
 public class TaskEmployeeController {
@@ -31,27 +33,36 @@ public class TaskEmployeeController {
 
     @GetMapping
     public ResponseEntity<?> getAllTaskEmployees() {
-        // TODO: 14.12.2020 not implemented
+        List<TaskEmployee> allTaskEmployees = taskEmployeeService.getAllTaskEmployees();
+
         return ResponseEntity.ok("");
     }
 
     @DeleteMapping("{task_employee_id}")
     public ResponseEntity<?> deleteTaskEmployee(@PathVariable("task_employee_id") TaskEmployee employee) {
-        // TODO: 14.12.2020 not implemented
+        taskEmployeeService.deleteTaskEmployee(employee);
+
         return ResponseEntity.ok("");
     }
 
     @PostMapping("{task_employee_id}/positions")
     public ResponseEntity<?> setTaskEmployeePosition(@PathVariable("task_employee_id") TaskEmployee employee,
                                                      @RequestParam("duty") Duty duty) {
-        // TODO: 14.12.2020 not implemented
-        return ResponseEntity.ok("");
+
+        if (!taskEmployeeService.setTaskEmployeePosition(employee, duty)) {
+            return ResponseEntity.ok("User with such id is not exists!");
+        }
+
+        return ResponseEntity.ok("Operation is success!");
+
     }
 
     @DeleteMapping("{task_employee_id}/positions/{duty}")
     public ResponseEntity<?> deleteTaskEmployeePosition(@PathVariable("task_employee_id") TaskEmployee employee,
                                                         @PathVariable("duty") Duty duty) {
-        // TODO: 14.12.2020 not implemented
-        return ResponseEntity.ok("");
+        if(!taskEmployeeService.deleteTaskEmployeePosition(employee, duty)){
+            return ResponseEntity.ok("TaskEmployee not found");
+        }
+        return ResponseEntity.ok("Operation is success!");
     }
 }

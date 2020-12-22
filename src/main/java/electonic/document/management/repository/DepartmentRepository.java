@@ -17,7 +17,15 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     List<Department> findAllByLeftKeyLessThanAndRightKeyGreaterThanEqual(Long leftLessThan, Long rightGreaterThan);
 
+    List<Department> findAllByLeftKeyLessThanAndLeftKeyGreaterThan(Long lessThen, Long greaterThan);
+
+    List<Department> findAllByRightKeyGreaterThanAndRightKeyLessThan(Long greaterThan, Long lessThen);
+
     @Modifying
     @Query("UPDATE Department d SET d.leftKey = :leftKey, d.rightKey = :rightKey where d.id = :departmentId")
     void updateDepartmentTree(@Param("departmentId") Long departmentId, @Param("leftKey") Long leftKey, @Param("rightKey") Long rightKey);
+
+    @Modifying
+    @Query("UPDATE Department d SET d.parentId = :newParentId where d.id = :departmentId")
+    void updateDepartmentParent(@Param("departmentId") Long departmentId, @Param("newParentId") Long newParentId);
 }

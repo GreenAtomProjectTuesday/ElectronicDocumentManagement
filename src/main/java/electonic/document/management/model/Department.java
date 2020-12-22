@@ -32,13 +32,17 @@ public class Department {
     )
     private List<DepartmentEmployee> departmentStaff;
 
+    @JsonView(Views.FullClass.class)
     private Long level;
 
     @Column(nullable = false)
+    @JsonView(Views.FullClass.class)
     private Long parentId;
 
+    @JsonView(Views.FullClass.class)
     private Long leftKey;
 
+    @JsonView(Views.FullClass.class)
     private Long rightKey;
 
     @Override

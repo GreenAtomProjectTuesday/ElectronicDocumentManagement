@@ -21,7 +21,7 @@ from "user";
 delete
 from department;
 
-alter sequence hibernate_sequence restart with 15;
+alter sequence hibernate_sequence restart with 20;
 
 insert into "user"(id, password, username)
 values (1, '$2a$08$zDD0FuCTBwXOrgeNs3QuDOh1q/hOJ1I8p/VqSJT73QTsq.h2oUyzK', '1'),
@@ -34,8 +34,8 @@ values (1, 'LEAD'),
 insert into task(id, ready_to_review, name, task_description)
 values (3, false, 'eee', 'edm task test');
 
-insert into department(id, name)
-values (4, 'test department');
+insert into department(id, left_key, level, name, parent_id, right_key)
+values (1, 1, 1, '1', 1, 2);
 
 insert into document(id, name, content, user_id)
 values (5, 'test document', 'test content', 2);

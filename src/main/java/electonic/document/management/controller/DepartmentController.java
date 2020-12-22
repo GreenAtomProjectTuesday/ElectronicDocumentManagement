@@ -36,13 +36,20 @@ public class DepartmentController {
     @GetMapping
     public ResponseEntity<?> getAllDepartments() throws JsonProcessingException {
         return ResponseEntity.ok(objectMapper
-                .writerWithView(Views.IdName.class)
+                .writerWithView(Views.FullClass.class)
                 .writeValueAsString(departmentService.getAllDepartments()));
     }
 
     @DeleteMapping("{department_id}")
     public ResponseEntity<?> deleteDepartments(@PathVariable("department_id") Department department) {
         departmentService.deleteDepartment(department);
+        return ResponseEntity.ok("department was successfully deleted");
+    }
+
+    @PatchMapping("{department_id}/{new_parent_id}")
+    public ResponseEntity<?> moveDepartmentInHierarchy(@PathVariable("department_id") Department department,
+                                               @PathVariable Long new_parent_id) {
+        departmentService.moveDepartmentInHierarchy(department, new_parent_id);
         return ResponseEntity.ok("department was successfully deleted");
     }
 

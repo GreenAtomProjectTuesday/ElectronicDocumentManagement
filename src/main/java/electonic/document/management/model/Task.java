@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.user.TaskEmployee;
-import electonic.document.management.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +13,34 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
+@NamedEntityGraph(
+        name = "task-entity-graph-for-report",
+        attributeNodes = {
+                @NamedAttributeNode("name"),
+                @NamedAttributeNode("taskDescription"),
+                @NamedAttributeNode("creationDate"),
+                @NamedAttributeNode("expiryDate"),
+                @NamedAttributeNode("readyToReview"),
+                @NamedAttributeNode(value = "taskEmployees", subgraph = "taskEmployees-subgraph"),
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "taskEmployees-subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("assignmentDate"),
+                                @NamedAttributeNode(value = "employee", subgraph = "employee-subgraph")
+                        }
+                ),
+                @NamedSubgraph(
+                        name = "employee-subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("fullName"),
+                                @NamedAttributeNode("phone")
+                        }
+                ),
+        }
+)
 
 @Entity
 @Table(name = "task")

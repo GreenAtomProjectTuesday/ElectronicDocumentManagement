@@ -1,11 +1,17 @@
 package electonic.document.management.service;
 
 import electonic.document.management.model.Department;
+import electonic.document.management.model.RequestParametersException;
+import electonic.document.management.model.user.DepartmentEmployee;
 import electonic.document.management.repository.DepartmentRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,15 +30,18 @@ public class DepartmentService {
     }
 
     @Transactional
-    public boolean addDepartment(Department department) {
+    public void addDepartment(Department department) throws RequestParametersException {
         Department departmentFromDb = departmentRepository.getDepartmentByName(department.getName());
 
         if (departmentFromDb != null) {
-            return false;
+            throw new RequestParametersException("Department with such name already exists!");
         }
 
-        // TODO: 18.12.2020 handle null in optional
-        Department parentDepartment = departmentRepository.findById(department.getParentId()).get();
+        Optional<Department> optionalDepartment = departmentRepository.findById(department.getParentId());
+        if (optionalDepartment.isEmpty()) {
+            throw new RequestParametersException("Parent department with such id is not exists!");
+        }
+        Department parentDepartment = optionalDepartment.get();
 
         updateTreeKeys(parentDepartment.getRightKey(), 2L);
 
@@ -42,7 +51,6 @@ public class DepartmentService {
         departmentRepository.save(department);
 
         updateParentBranch(department.getLeftKey(), 2L);
-        return true;
     }
 
     @Transactional
@@ -56,12 +64,25 @@ public class DepartmentService {
         updateParentBranch(department.getLeftKey(), differenceAfterDelete);
     }
 
-    // TODO: 19.12.2020 prohibit movement to heir
     @Transactional
-    public void moveDepartmentInHierarchy(Department department, Long newParentId) {
-        // TODO: 19.12.2020 handle null in optional
-        Department newParentDepartment = departmentRepository.findById(newParentId).get();
-        Department oldParentDepartment = departmentRepository.findById(department.getParentId()).get();
+    public void moveDepartmentInHierarchy(Department department, Long newParentId) throws RequestParametersException {
+        Optional<Department> optionalNewParentDepartment = departmentRepository.findById(newParentId);
+        if (optionalNewParentDepartment.isEmpty()) {
+            throw new RequestParametersException("Parent department with such id is not exists!");
+        }
+        Department newParentDepartment = optionalNewParentDepartment.get();
+
+        if (newParentDepartment.getLeftKey() > department.getLeftKey()
+                && department.getRightKey() > newParentDepartment.getRightKey()) {
+            throw new RequestParametersException("Department movement to heir is prohibited!");
+        }
+
+        Optional<Department> optionalOldParentDepartment = departmentRepository.findById(department.getParentId());
+        if (optionalOldParentDepartment.isEmpty()) {
+            throw new RuntimeException("There is a department without parent!");
+        }
+        Department oldParentDepartment = optionalOldParentDepartment.get();
+
         List<Department> departmentsToMove = departmentRepository
                 .findAllByLeftKeyGreaterThanEqualAndRightKeyLessThanEqual(department.getLeftKey(), department.getRightKey());
 
@@ -136,5 +157,17 @@ public class DepartmentService {
         for (Department department : departmentsToUpdate) {
             departmentRepository.updateDepartmentTree(department.getId(), department.getLeftKey(), department.getRightKey() + value);
         }
+    }
+
+    // TODO add search by department employee
+    // TODO add test
+    public List<Department> findDepartmentsByExample(String subStringInName, DepartmentEmployee departmentEmployee) {
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withMatcher("name", match -> match.contains());
+        Department department = new Department();
+        department.setName(subStringInName);
+        Example<Department> departmentExample = Example.of(department, matcher);
+        return departmentRepository.findAll(departmentExample);
     }
 }

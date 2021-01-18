@@ -9,18 +9,10 @@ import java.io.IOException;
 @Component
 public class DocumentUtils {
 
-    public DocumentUtils() {
-
-    }
-
-    // TODO improve this
     public void fileToDocument(Document document, MultipartFile file) throws IOException {
-
         document.setName(file.getOriginalFilename());
         document.setFileType(file.getContentType());
         document.setSize(file.getSize());
-
-
         document.setContent(file.getBytes());
     }
 

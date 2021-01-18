@@ -1,11 +1,17 @@
 package electonic.document.management.service;
 
+import electonic.document.management.model.Message;
 import electonic.document.management.model.document.AttributeValue;
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.document.DocumentAttribute;
 import electonic.document.management.repository.AttributeValueRepository;
 import electonic.document.management.repository.DocumentAttributeRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class DocumentAttributeService {
@@ -17,7 +23,7 @@ public class DocumentAttributeService {
         this.attributeValueRepository = attributeValueRepository;
     }
 
-    //TODO add transaction?
+    @Transactional
     public boolean registerAttribute(String attributeName, Document document, String attributeValueString) {
         DocumentAttribute documentAttributeFromDb = documentAttributeRepository
                 .getDocumentAttributeByName(attributeName);
@@ -46,5 +52,19 @@ public class DocumentAttributeService {
 
     public void deleteAttribute(Long attributeValue) {
         documentAttributeRepository.deleteById(attributeValue);
+    }
+
+    public List<DocumentAttribute> findDocumentAttributesByExample(String subStringInName, Document document, AttributeValue attributeValue) {
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withMatcher("name", match -> match.contains());
+
+        DocumentAttribute documentAttribute = new DocumentAttribute();
+        documentAttribute.setName(subStringInName);
+        documentAttribute.setDocument(document);
+        documentAttribute.setAttributeValue(attributeValue);
+
+        Example<DocumentAttribute> documentAttributeExample = Example.of(documentAttribute, matcher);
+        return documentAttributeRepository.findAll(documentAttributeExample);
     }
 }

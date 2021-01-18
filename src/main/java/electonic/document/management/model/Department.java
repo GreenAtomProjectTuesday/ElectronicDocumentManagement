@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import electonic.document.management.model.user.DepartmentEmployee;
 import electonic.document.management.model.user.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;

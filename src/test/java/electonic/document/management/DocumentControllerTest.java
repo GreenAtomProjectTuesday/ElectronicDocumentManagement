@@ -10,15 +10,14 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
 
+import static electonic.document.management.LoginTest.login;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,18 +29,9 @@ public class DocumentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    //TODO this same code in all tests
-    public Cookie login() throws Exception {
-        MvcResult resultActions = this.mockMvc.perform(post("/login").param("username", "1")
-                .param("password", "1"))
-                .andDo(print())
-                .andExpect(cookie().exists("Authorization")).andReturn();
-        return resultActions.getResponse().getCookie("Authorization");
-    }
-
     @Test
     public void testUploadFile() throws Exception {
-        Cookie authorization = login();
+        Cookie authorization = login(this.mockMvc, "1", "1");
         MockMultipartFile jsonFile = new MockMultipartFile("test.json", "",
                 "application/json", "{\"key1\": \"value1\"}".getBytes());
         this.mockMvc.perform(multipart("/documents")
@@ -54,7 +44,7 @@ public class DocumentControllerTest {
 
     @Test
     public void testGetAllDocumentNames() throws Exception {
-        Cookie authorization = login();
+        Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(get("/documents")
                 .cookie(authorization))
                 .andDo(print())
@@ -65,7 +55,7 @@ public class DocumentControllerTest {
     public void testEditDocument() throws Exception {
         MockMultipartFile jsonFile = new MockMultipartFile("test.json", "",
                 "application/json", "{\"key2\": \"value2\"}".getBytes());
-        Cookie authorization = login();
+        Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(multipart("/documents/5")
                 .file("new_file", jsonFile.getBytes())
                 .param("commitMessage", "test commit message")
@@ -76,7 +66,7 @@ public class DocumentControllerTest {
 
     @Test
     public void testDeleteDocument() throws Exception {
-        Cookie authorization = login();
+        Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(delete("/documents/5")
                 .cookie(authorization))
                 .andDo(print())

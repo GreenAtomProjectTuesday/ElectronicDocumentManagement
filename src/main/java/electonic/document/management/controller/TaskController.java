@@ -3,6 +3,7 @@ package electonic.document.management.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import electonic.document.management.model.Message;
 import electonic.document.management.model.Task;
 import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
@@ -14,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +33,6 @@ public class TaskController {
         this.objectMapper = objectMapper;
     }
 
-    //TODO PreAuthorize not working
     @PreAuthorize("hasAuthority('LEAD')")
     @PostMapping
     public ResponseEntity<?> createTask(Task task, @AuthenticationPrincipal User user) {
@@ -42,27 +43,6 @@ public class TaskController {
         return ResponseEntity.ok("Task was successfully created");
     }
 
-    @PreAuthorize("hasAuthority('LEAD')")
-    @PostMapping("{task_id}/curators/performers/")
-    // TODO can't convert Json String to Long[] by default
-    // TODO: 14.12.2020 not needed and not working, remove or edit it
-    public ResponseEntity<?> setCuratorsAndPerformers(
-            @PathVariable("task_id") Task task,
-            @RequestParam(value = "curators_id", required = false) String curators_ids,
-            @RequestParam(value = "performers_id", required = false) String performers_ids)
-            throws JsonProcessingException {
-        List<User> curators = Collections.emptyList(), performers = Collections.emptyList();
-        if (curators_ids != null)
-            curators = userService.getUsersByIds(objectMapper.readValue(curators_ids, Long[].class));
-        if (performers_ids != null)
-            performers = userService.getUsersByIds(objectMapper.readValue(performers_ids, Long[].class));
-
-        taskService.setCurators(task, curators);
-        taskService.setPerformers(task, performers);
-
-        return ResponseEntity.ok("Curators were successfully set");
-    }
-
     @PatchMapping("{task_id}")
     //TODO edit expiry date and description
     public ResponseEntity<?> editTask(@PathVariable("task_id") Task task,
@@ -71,7 +51,6 @@ public class TaskController {
         return ResponseEntity.ok("Task was successfully edited");
     }
 
-    //TODO consider replacing
     @PatchMapping("{task_id}/ready_to_review")
     public ResponseEntity<?> reviewTask(@PathVariable("task_id") Task task) {
         taskService.sendTaskToReview(task);
@@ -98,6 +77,23 @@ public class TaskController {
     public ResponseEntity<?> deleteTask(@PathVariable("task_id") Task task) {
         taskService.deleteTask(task);
         return ResponseEntity.ok("Task was successfully deleted");
+    }
+
+    @GetMapping("with_params")
+    public ResponseEntity<?> findMessages(
+            @RequestParam(value = "name_contains", required = false) String subStringInName,
+            @RequestParam(value = "task_description_contains", required = false) String subStringInNameTaskDescription,
+            @RequestParam(value = "creation_date", required = false) LocalDateTime creationDate,
+            @RequestParam(value = "expiry_date", required = false) LocalDateTime expiryDate,
+            @RequestParam(value = "ready_to_review", required = false) Boolean readyToReview) throws JsonProcessingException {
+        if (subStringInName == null && subStringInNameTaskDescription == null && creationDate == null
+                && expiryDate == null && readyToReview == null)
+            return ResponseEntity.ok("No parameters were specified");
+        List<Task> departmentsWithParams = taskService
+                .findTasksByExample(subStringInName, subStringInNameTaskDescription, creationDate, expiryDate, readyToReview);
+        return ResponseEntity.ok(objectMapper
+                .writerWithView(Views.FullClass.class)
+                .writeValueAsString(departmentsWithParams));
     }
 
     //TODO method set expiry date

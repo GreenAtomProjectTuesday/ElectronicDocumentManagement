@@ -19,14 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
-
 import java.util.List;
 
+import static electonic.document.management.LoginTest.login;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,19 +38,10 @@ public class DepartmentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    //TODO this same code in all tests
-    public Cookie login(String username, String password) throws Exception {
-        MvcResult resultActions = this.mockMvc.perform(post("/login").param("username", username)
-                .param("password", password))
-                .andDo(print())
-                .andExpect(cookie().exists("Authorization")).andReturn();
-        return resultActions.getResponse().getCookie("Authorization");
-    }
-
     @Test
     public void testCreateDepartment() throws Exception {
-        Cookie authorizationWithAuthorities = login("1", "1");
-        Cookie authorization = login("2", "2");
+        Cookie authorizationWithAuthorities = login(this.mockMvc, "1", "1");
+        Cookie authorization = login(this.mockMvc, "2", "2");
         this.mockMvc.perform(post("/departments")
                 .param("name", "17")
                 .cookie(authorization))
@@ -72,7 +63,7 @@ public class DepartmentControllerTest {
 
     @Test
     public void testGetAllDepartments() throws Exception {
-        Cookie authorization = login("1", "1");
+        Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(get("/departments")
                 .cookie(authorization))
                 .andDo(print())
@@ -82,7 +73,7 @@ public class DepartmentControllerTest {
 
     @Test
     public void testDeleteDepartment() throws Exception {
-        Cookie authorization = login("1", "1");
+        Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(delete("/departments/7")
                 .cookie(authorization))
                 .andDo(print())
@@ -95,10 +86,10 @@ public class DepartmentControllerTest {
                 .andExpect(content().string(containsString("\"name\":\"10\"," +
                         "\"departmentStaff\":[],\"level\":4,\"parentId\":5,\"leftKey\":4,\"rightKey\":5")));
     }
-    
+
     @Test
     public void testMoveDepartmentUp() throws Exception {
-        Cookie authorization = login("1", "1");
+        Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(patch("/departments/9/11")
                 .cookie(authorization))
                 .andDo(print());
@@ -116,7 +107,7 @@ public class DepartmentControllerTest {
 
     @Test
     public void testMoveDepartmentDown() throws Exception {
-        Cookie authorization = login("1", "1");
+        Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(patch("/departments/7/16")
                 .cookie(authorization))
                 .andDo(print());

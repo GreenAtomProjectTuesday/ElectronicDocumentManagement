@@ -32,7 +32,6 @@ public class DepartmentEmployee {
     @JsonView(Views.FullProfile.class)
     private Employee employee;
 
-    //TODO create separate entity
     @ElementCollection(targetClass = Position.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "department_employee_position", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)

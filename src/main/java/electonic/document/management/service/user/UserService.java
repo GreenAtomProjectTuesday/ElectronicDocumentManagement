@@ -1,10 +1,13 @@
 package electonic.document.management.service.user;
 
 import electonic.document.management.config.filter.FilterConstant;
+import electonic.document.management.model.Task;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.Role;
 import electonic.document.management.model.user.User;
 import electonic.document.management.repository.user.UserRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -90,9 +93,21 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    //todo handle null optional
-    public User getUser(User user) {
-        Optional<User> userFromDb = userRepository.findById(user.getId());
-        return userFromDb.get();
+    public List<User> findTasksByExample(String subStringInUsername, String subStringInPassword,
+                                         String subStringInEmail, LocalDateTime registrationDate) {
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withMatcher("username", match -> match.contains())
+                .withMatcher("password", match -> match.contains())
+                .withMatcher("email", match -> match.contains());
+
+        User user = new User();
+        user.setUsername(subStringInUsername);
+        user.setPassword(subStringInPassword);
+        user.setEmail(subStringInEmail);
+        user.setRegistrationDate(registrationDate);
+
+        Example<User> userExample = Example.of(user, matcher);
+        return userRepository.findAll(userExample);
     }
 }

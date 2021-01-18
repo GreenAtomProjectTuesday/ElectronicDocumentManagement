@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -14,11 +13,11 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
 
-import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,9 +30,9 @@ public class LoginTest {
     @Autowired
     private MockMvc mockMvc;
 
-    public Cookie login() throws Exception {
-        MvcResult resultActions = this.mockMvc.perform(post("/login").param("username", "1")
-                .param("password", "1"))
+    public static Cookie login(MockMvc mockMvc, String username, String password) throws Exception {
+        MvcResult resultActions = mockMvc.perform(post("/login").param("username", username)
+                .param("password", password))
                 .andDo(print())
                 .andExpect(cookie().exists("Authorization")).andReturn();
         return resultActions.getResponse().getCookie("Authorization");
@@ -41,7 +40,7 @@ public class LoginTest {
 
     @Test
     public void loginWithJwt() throws Exception {
-        login();
+        login(mockMvc, "1", "1");
     }
 
     @Test

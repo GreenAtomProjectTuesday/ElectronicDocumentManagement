@@ -9,14 +9,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import javax.persistence.Table;
-import javax.servlet.http.Cookie;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,15 +20,6 @@ public class MessageControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    //TODO remove this same code in all tests
-    public Cookie login() throws Exception {
-        MvcResult resultActions = this.mockMvc.perform(post("/login").param("username", "1")
-                .param("password", "1"))
-                .andDo(print())
-                .andExpect(cookie().exists("Authorization")).andReturn();
-        return resultActions.getResponse().getCookie("Authorization");
-    }
 
     @Test
     public void testCreateMessage() {

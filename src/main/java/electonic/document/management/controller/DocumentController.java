@@ -3,7 +3,9 @@ package electonic.document.management.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.*;
+import electonic.document.management.model.document.AttributeValue;
 import electonic.document.management.model.document.Document;
+import electonic.document.management.model.document.DocumentAttribute;
 import electonic.document.management.model.document.DocumentState;
 import electonic.document.management.model.user.User;
 import electonic.document.management.service.DocumentStateService;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @RequestMapping("documents")
@@ -29,19 +33,23 @@ public class DocumentController {
         this.objectMapper = objectMapper;
     }
 
-    //TODO handle exception?
     //TODO add attributes
     //TODO create exception
     @PostMapping
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,
-                                             @RequestParam("task_id") Task task,
-                                             @AuthenticationPrincipal User user,
-                                             @RequestParam(name = "commitMessage", defaultValue = "create file") String commitMessage) throws IOException {
+                                        @RequestParam("task_id") Task task,
+                                        @AuthenticationPrincipal User user,
+                                        @RequestParam(name = "commitMessage", defaultValue = "create file") String commitMessage) throws IOException {
         if (file.isEmpty()) {
             return ResponseEntity.ok("file is empty");
         }
 
-        Document document = documentService.createDocument(file, user, task);
+        Document document = null;
+        try {
+            document = documentService.createDocument(file, user, task);
+        } catch (RequestParametersException e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
         DocumentState documentState = documentStateService.createState(document, user, commitMessage);
         document.getDocumentStates().add(documentState);
 
@@ -53,16 +61,20 @@ public class DocumentController {
     //TODO add document body to ResponseBody
     @GetMapping("{id}")
     public ResponseEntity<?> downloadDocument(@PathVariable("id") Long id) {
-        Document document = documentService.getDocumentById(id);
+        try {
+            Document document = documentService.getDocumentById(id);
+        } catch (RequestParametersException e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
         return ResponseEntity.ok("Document returned");
     }
 
     @PostMapping("{document_id}")
     // TODO: 05.12.2020 Keep old documents?
     public ResponseEntity<?> editDocument(@PathVariable("document_id") Document document,
-                                               @RequestParam("new_file") MultipartFile file,
-                                               @AuthenticationPrincipal User user,
-                                               @RequestParam(name = "commitMessage", defaultValue = "edit file") String commitMessage) throws IOException {
+                                          @RequestParam("new_file") MultipartFile file,
+                                          @AuthenticationPrincipal User user,
+                                          @RequestParam(name = "commitMessage", defaultValue = "edit file") String commitMessage) throws IOException {
         DocumentState documentState = documentStateService.createState(document, user, commitMessage);
         documentService.editDocument(document, file, documentState);
         return ResponseEntity.ok("Document was successfully edited. New state " + documentState.getCommitMessage());
@@ -80,5 +92,26 @@ public class DocumentController {
     public ResponseEntity<?> deleteDocument(@PathVariable("document_id") Document document) {
         documentService.deleteDocument(document);
         return ResponseEntity.ok("Document was successfully deleted");
+    }
+
+
+    //TODO search by size, by date in range and by attribute in list
+    @GetMapping("with_params")
+    public ResponseEntity<?> findDocuments(
+            @RequestParam(value = "name_contains", required = false) String subStringInName,
+            @RequestParam(value = "file_uuid", required = false) String fileUuid,
+            @RequestParam(value = "file_type", required = false) String fileType,
+            @RequestParam(value = "creation_date", required = false) LocalDateTime creationDate,
+            @RequestParam(value = "task_id", required = false) Task task,
+            @RequestParam(value = "owner_id", required = false) User owner
+    ) throws JsonProcessingException {
+        if (subStringInName == null && fileUuid == null && fileType == null
+                && creationDate == null && task == null && owner == null)
+            return ResponseEntity.ok("No parameters were specified");
+        List<Document> departmentsWithParams = documentService
+                .findDocumentsByExample(subStringInName, fileUuid, fileType, creationDate, task, owner);
+        return ResponseEntity.ok(objectMapper
+                .writerWithView(Views.DocumentParameters.class)
+                .writeValueAsString(departmentsWithParams));
     }
 }

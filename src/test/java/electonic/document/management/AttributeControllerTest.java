@@ -9,14 +9,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
 
+import static electonic.document.management.LoginTest.login;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @RunWith(SpringRunner.class)
@@ -30,18 +29,9 @@ public class AttributeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    //TODO remove this same code in all tests
-    public Cookie login(String username, String password) throws Exception {
-        MvcResult resultActions = this.mockMvc.perform(post("/login").param("username", username)
-                .param("password", password))
-                .andDo(print())
-                .andExpect(cookie().exists("Authorization")).andReturn();
-        return resultActions.getResponse().getCookie("Authorization");
-    }
-
     @Test
     public void testCreateAttribute() throws Exception {
-        Cookie authorizationWithAuthorities = login("1", "1");
+        Cookie authorizationWithAuthorities = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(post("/attributes")
                 .param("name", "test attribute number 2")
                 .param("document_id", "5")
@@ -53,7 +43,7 @@ public class AttributeControllerTest {
 
     @Test
     public void testEditAttribute() throws Exception {
-        Cookie authorizationWithAuthorities = login("1", "1");
+        Cookie authorizationWithAuthorities = login(this.mockMvc,"1", "1");
         this.mockMvc.perform(patch("/attributes/6")
                 .param("new_value", "test attribute value changed")
                 .cookie(authorizationWithAuthorities))
@@ -63,7 +53,7 @@ public class AttributeControllerTest {
 
     @Test
     public void testDeleteAttribute() throws Exception {
-        Cookie authorizationWithAuthorities = login("1", "1");
+        Cookie authorizationWithAuthorities = login(this.mockMvc,"1", "1");
         this.mockMvc.perform(delete("/attributes/7")
                 .cookie(authorizationWithAuthorities))
                 .andDo(print())

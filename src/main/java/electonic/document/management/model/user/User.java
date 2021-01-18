@@ -62,7 +62,6 @@ public class User implements UserDetails {
         return password;
     }
 
-    //    TODO implement some of this methods?
     @Override
     public boolean isAccountNonExpired() {
         return true;

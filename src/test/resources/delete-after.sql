@@ -13,6 +13,8 @@ from department_employee;
 delete
 from task_employee;
 delete
+from message;
+delete
 from task;
 delete
 from employee;

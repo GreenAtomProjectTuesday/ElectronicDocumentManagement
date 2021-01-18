@@ -7,8 +7,7 @@ import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.repository.DocumentRepository;
 import electonic.document.management.repository.ReportRepository;
-import electonic.document.management.repository.projections.DocumentDetailsChooseI;
-import electonic.document.management.repository.user.EmployeeRepository;
+import electonic.document.management.repository.projections.DocumentProjectionI;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +20,17 @@ import static electonic.document.management.utils.ReportUtils.setDocuments;
 public class ReportService {
     private final ReportRepository reportRepository;
     private final DocumentRepository documentRepository;
-    private final EmployeeRepository employeeRepository;
 
-    public ReportService(ReportRepository reportRepository, DocumentRepository documentRepository, EmployeeRepository employeeRepository) {
+    public ReportService(ReportRepository reportRepository, DocumentRepository documentRepository) {
         this.reportRepository = reportRepository;
         this.documentRepository = documentRepository;
-        this.employeeRepository = employeeRepository;
     }
 
     @Transactional
     public Report getReportByTaskName(String taskName) {
         Task task = reportRepository.getTaskByName(taskName);
         Report report = getReportFromTaskWithoutDocuments(task);
-        List<DocumentDetailsChooseI> documents = documentRepository
+        List<DocumentProjectionI> documents = documentRepository
                 .getAllDocumentsByTaskName(taskName);
         setDocuments(report, documents);
         setDocumentOwners(report);

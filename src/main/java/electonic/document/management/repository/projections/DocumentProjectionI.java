@@ -2,7 +2,7 @@ package electonic.document.management.repository.projections;
 
 import java.time.LocalDateTime;
 
-public interface DocumentDetailsChooseI {
+public interface DocumentProjectionI {
     public Long getId();
 
     public String getName();

@@ -5,7 +5,7 @@ import electonic.document.management.model.document.Document;
 import electonic.document.management.model.report.Report;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.TaskEmployee;
-import electonic.document.management.repository.projections.DocumentDetailsChooseI;
+import electonic.document.management.repository.projections.DocumentProjectionI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +29,9 @@ public class ReportUtils {
         return report;
     }
 
-    public static void setDocuments(Report report, List<DocumentDetailsChooseI> documents) {
+    public static void setDocuments(Report report, List<DocumentProjectionI> documents) {
         List<Document> documentList=new ArrayList<>(documents.size());
-        for(DocumentDetailsChooseI doc:documents){
+        for(DocumentProjectionI doc:documents){
             Document document = new Document();
             document.setId(doc.getId());
             document.setName(doc.getName());

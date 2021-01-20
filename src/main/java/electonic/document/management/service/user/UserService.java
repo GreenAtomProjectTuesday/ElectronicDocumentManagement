@@ -1,7 +1,6 @@
 package electonic.document.management.service.user;
 
 import electonic.document.management.config.filter.FilterConstant;
-import electonic.document.management.model.Task;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.Role;
 import electonic.document.management.model.user.User;
@@ -13,22 +12,29 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TaskEmployeeService taskEmployeeService;
+    private final DepartmentEmployeeService departmentEmployeeService;
+    private final EmployeeService employeeService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       TaskEmployeeService taskEmployeeService, DepartmentEmployeeService departmentEmployeeService, EmployeeService employeeService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.taskEmployeeService = taskEmployeeService;
+        this.departmentEmployeeService = departmentEmployeeService;
+        this.employeeService = employeeService;
     }
 
     @Override
@@ -71,16 +77,17 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public boolean deleteUser(User user, HttpServletResponse response, User currentUser) {
-        if (user.equals(currentUser)) {
-            userRepository.delete(user);
-            Cookie cookie = new Cookie(FilterConstant.COOKIE_NAME, "");
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-            return true;
+    @Transactional
+    public void deleteUser(HttpServletResponse response, User user) {
+        if (employeeService.employeeExistsCheck(user.getId())) {
+            taskEmployeeService.deleteByEmployeeId(user.getId());
+            departmentEmployeeService.deleteByEmployeeId(user.getId());
         }
 
-        return false;
+        userRepository.delete(user);
+        Cookie cookie = new Cookie(FilterConstant.COOKIE_NAME, "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 
     public void addEmployee(User user, String fullName, String phone) {

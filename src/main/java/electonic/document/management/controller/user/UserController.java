@@ -2,9 +2,7 @@ package electonic.document.management.controller.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import electonic.document.management.model.Task;
 import electonic.document.management.model.Views;
-import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.Role;
 import electonic.document.management.model.user.User;
 import electonic.document.management.service.user.UserService;
@@ -30,7 +28,6 @@ public class UserController {
     }
 
     @PostMapping
-    //TODO check for field on this level or frontend?
     public ResponseEntity<?> addUser(User user) {
 
         if (!userService.addUser(user)) {
@@ -39,7 +36,6 @@ public class UserController {
         return ResponseEntity.ok("user was registered");
     }
 
-    // TODO consider replacing role with roleSet
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("{user_id}/roles")
     public ResponseEntity<?> setRole(@RequestParam("role") Role role,
@@ -57,15 +53,12 @@ public class UserController {
                 .writeValueAsString(userService.getAllUsers()));
     }
 
-    //TODO can't delete user because of creator id in task
-    //TODO think about logic for delete user
-    @DeleteMapping("{user_id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("user_id") User user,
-                                        HttpServletResponse response,
+    // TODO: 18.01.2021 test it
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(HttpServletResponse response,
                                         @AuthenticationPrincipal User currentUser) {
-        if (!userService.deleteUser(user, response, currentUser))
-            return ResponseEntity.ok("U can't delete another user");
-        return ResponseEntity.ok("User was successfully deleted");
+        userService.deleteUser(response, currentUser);
+        return ResponseEntity.ok("Your user account was successfully deleted");
     }
 
     //TODO search by roles

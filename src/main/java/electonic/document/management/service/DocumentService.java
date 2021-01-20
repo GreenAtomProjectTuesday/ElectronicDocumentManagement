@@ -1,10 +1,9 @@
 package electonic.document.management.service;
 
-import electonic.document.management.model.Message;
 import electonic.document.management.model.RequestParametersException;
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.Task;
-import electonic.document.management.model.document.DocumentAttribute;
+import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.model.document.DocumentState;
 import electonic.document.management.repository.DocumentRepository;
@@ -12,6 +11,7 @@ import electonic.document.management.utils.DocumentUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -24,13 +24,17 @@ import java.util.Optional;
 public class DocumentService {
     private final DocumentRepository documentRepository;
     private final DocumentUtils documentUtils;
+    private final DocumentStateService documentStateService;
 
-    public DocumentService(DocumentRepository documentRepository, DocumentUtils documentUtils) {
+    public DocumentService(DocumentRepository documentRepository, DocumentUtils documentUtils, DocumentStateService documentStateService) {
         this.documentRepository = documentRepository;
         this.documentUtils = documentUtils;
+        this.documentStateService = documentStateService;
     }
 
-    public Document createDocument(MultipartFile file, User user, Task task) throws IOException, RequestParametersException {
+    @Transactional
+    public void createDocument(MultipartFile file, Employee employee, Task task, String commitMessage)
+            throws IOException, RequestParametersException {
         Document document = new Document();
         documentUtils.fileToDocument(document, file);
 
@@ -40,11 +44,14 @@ public class DocumentService {
         }
 
         document.setCreationDate(LocalDateTime.now());
-        document.setOwner(user);
+        document.setOwner(employee);
         document.setTask(task);
         document.setDocumentStates(new LinkedList<>());
 
-        return document;
+        DocumentState documentState = documentStateService.createState(document, employee, commitMessage);
+        document.getDocumentStates().add(documentState);
+
+        documentRepository.save(document);
     }
 
     public List<Document> getAllDocumentNames() {
@@ -69,13 +76,8 @@ public class DocumentService {
         documentRepository.delete(document);
     }
 
-
-    public void saveDocument(Document document) {
-        documentRepository.save(document);
-    }
-
     public List<Document> findDocumentsByExample(String subStringInName, String fileUuid, String fileType,
-                                                 LocalDateTime creationDate, Task task, User owner) {
+                                                 LocalDateTime creationDate, Task task, Employee owner) {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()
                 .withMatcher("name", match -> match.contains())

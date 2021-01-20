@@ -2,6 +2,7 @@ package electonic.document.management.service;
 
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.document.DocumentState;
+import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.repository.DocumentStateRepository;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,11 @@ public class DocumentStateService {
     }
 
 
-    public DocumentState createState(Document document, User user, String commitMessage) {
+    public DocumentState createState(Document document, Employee employee, String commitMessage) {
         DocumentState documentState = new DocumentState();
         documentState.setDocument(document);
         documentState.setCommitDate(LocalDateTime.now());
-        documentState.setCreator(user);
+        documentState.setCreator(employee);
         documentState.setCommitMessage(commitMessage);
 
         return documentState;

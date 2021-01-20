@@ -39,13 +39,19 @@ values (3, false, 'eee', 'edm task test');
 insert into department(id, left_key, level, name, parent_id, right_key)
 values (1, 1, 1, '1', 1, 2);
 
+insert into employee (user_id, full_name, phone)
+values (1, 'test employee', 1);
+
 insert into document(id, name, content, user_id)
-values (5, 'test document', 'test content', 2);
+values (5, 'test document', 'test content', 1);
 
 insert into attribute_value(id, value)
 values (6, 'test attribute value');
 
 insert into document_attribute(id, name, attribute_value_id, document_id)
 VALUES (7, 'test attribute', 6, 5);
+
+insert into message (id, creation_date, text, user_id, task_id)
+values (8, '2020-12-18 19:26:57.216188', 'hello message hi privet', 1, 3);
 
 

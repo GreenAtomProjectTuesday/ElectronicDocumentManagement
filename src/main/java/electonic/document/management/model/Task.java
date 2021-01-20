@@ -55,6 +55,9 @@ public class Task {
     @JsonView(Views.FullClass.class)
     private List<Document> documents;
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> messages;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

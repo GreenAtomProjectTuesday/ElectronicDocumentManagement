@@ -2,6 +2,7 @@ package electonic.document.management.model.document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
 import lombok.Getter;
@@ -34,5 +35,8 @@ public class DocumentState {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     @JsonView(Views.FullClass.class)
-    private User creator;
+    private Employee creator;
+
+    @JsonView(Views.FullClass.class)
+    private DocumentStateType documentStateType;
 }

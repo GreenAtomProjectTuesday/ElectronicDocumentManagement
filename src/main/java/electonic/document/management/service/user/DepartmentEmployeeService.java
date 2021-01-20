@@ -30,4 +30,8 @@ public class DepartmentEmployeeService {
         departmentEmployeeRepository.save(departmentEmployee);
         return true;
     }
+
+    public void deleteByEmployeeId(Long id) {
+        departmentEmployeeRepository.deleteByEmployee_Id(id);
+    }
 }

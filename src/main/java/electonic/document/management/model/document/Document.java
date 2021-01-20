@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import electonic.document.management.model.Task;
+import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
 import lombok.Getter;
@@ -55,7 +56,7 @@ public class Document {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonView(Views.DocumentParameters.class)
-    private User owner;
+    private Employee owner;
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     @OrderColumn

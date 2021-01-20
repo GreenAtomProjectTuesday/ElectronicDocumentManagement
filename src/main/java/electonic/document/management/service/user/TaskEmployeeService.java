@@ -32,4 +32,8 @@ public class TaskEmployeeService {
         taskEmployeeRepository.save(taskEmployee);
         return true;
     }
+
+    public void deleteByEmployeeId(Long id) {
+        taskEmployeeRepository.deleteByEmployee_Id(id);
+    }
 }

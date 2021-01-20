@@ -58,18 +58,25 @@ public class UserControllerTest {
                 .andExpect(content().string(containsString("User role was successfully added!")));
     }
 
-
+    // TODO: 20.01.2021 after delete request there is document with reference to deleted employee
     @Test
     public void testDeleteUser() throws Exception {
         Cookie authorization = login(this.mockMvc, "1", "1");
-        this.mockMvc.perform(delete("/users/2")
+        this.mockMvc.perform(delete("/users")
                 .cookie(authorization))
                 .andDo(print())
-                .andExpect(content().string(containsString("U can't delete another user")));
-        this.mockMvc.perform(delete("/users/1")
+                .andExpect(content().string(containsString("Your user account was successfully deleted")));
+        authorization = login(this.mockMvc, "2", "2");
+        this.mockMvc.perform(get("/documents")
+                .cookie(authorization))
+                .andDo(print());
+        this.mockMvc.perform(get("/documents")
+                .cookie(authorization))
+                .andDo(print());
+        this.mockMvc.perform(delete("/users")
                 .cookie(authorization))
                 .andDo(print())
-                .andExpect(content().string(containsString("User was successfully deleted")));
+                .andExpect(content().string(containsString("Your user account was successfully deleted")));
     }
 
 }

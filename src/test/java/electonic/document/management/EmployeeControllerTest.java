@@ -33,7 +33,7 @@ public class EmployeeControllerTest {
     public void testAddEmployee() throws Exception {
         Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(post("/employees")
-                .param("user_id", "1")
+                .param("user_id", "2")
                 .param("full_name", "2 2 2")
                 .param("phone", "2")
                 .cookie(authorization))

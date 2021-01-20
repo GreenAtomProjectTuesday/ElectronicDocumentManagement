@@ -9,6 +9,7 @@ import electonic.document.management.model.user.User;
 import electonic.document.management.model.Views;
 import electonic.document.management.service.TaskService;
 import electonic.document.management.service.user.UserService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,12 +25,10 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService taskService;
-    private final UserService userService;
     private final ObjectMapper objectMapper;
 
-    public TaskController(TaskService taskService, UserService userService, ObjectMapper objectMapper) {
+    public TaskController(TaskService taskService, ObjectMapper objectMapper) {
         this.taskService = taskService;
-        this.userService = userService;
         this.objectMapper = objectMapper;
     }
 
@@ -83,8 +82,8 @@ public class TaskController {
     public ResponseEntity<?> findMessages(
             @RequestParam(value = "name_contains", required = false) String subStringInName,
             @RequestParam(value = "task_description_contains", required = false) String subStringInNameTaskDescription,
-            @RequestParam(value = "creation_date", required = false) LocalDateTime creationDate,
-            @RequestParam(value = "expiry_date", required = false) LocalDateTime expiryDate,
+            @RequestParam(value = "creation_date", required = false) @DateTimeFormat LocalDateTime creationDate,
+            @RequestParam(value = "expiry_date", required = false) @DateTimeFormat LocalDateTime expiryDate,
             @RequestParam(value = "ready_to_review", required = false) Boolean readyToReview) throws JsonProcessingException {
         if (subStringInName == null && subStringInNameTaskDescription == null && creationDate == null
                 && expiryDate == null && readyToReview == null)

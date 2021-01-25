@@ -8,12 +8,15 @@ import electonic.document.management.repository.user.DepartmentEmployeeRepositor
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,9 +26,6 @@ class DepartmentEmployeeServiceTest {
 
     @MockBean
     private DepartmentEmployeeRepository departmentEmployeeRepository;
-
-    @MockBean
-    DepartmentEmployee departmentEmployee;
 
     @Test
     void addDepartmentEmployee() {
@@ -58,11 +58,16 @@ class DepartmentEmployeeServiceTest {
 
     @Test
     void deleteDepartmentEmployeePosition() {
-
         Position position = Position.JUNIOR;
 
+        Set<Position> positionSet = new HashSet<>();
+        positionSet.add(position);
+        
+        DepartmentEmployee employee = new DepartmentEmployee();
+        employee.setPosition(positionSet);
+
         boolean isDeleteDepartmentEmployeePosition =
-                departmentEmployeeService.deleteDepartmentEmployeePosition(departmentEmployee, position);
+                departmentEmployeeService.deleteDepartmentEmployeePosition(employee, position);
 
         Assert.assertTrue(isDeleteDepartmentEmployeePosition);
     }
@@ -70,6 +75,8 @@ class DepartmentEmployeeServiceTest {
     @Test
     void setDepartmentEmployeePosition() {
         Position position = Position.JUNIOR;
+
+        DepartmentEmployee departmentEmployee = new DepartmentEmployee();
 
         departmentEmployeeService.setDepartmentEmployeePosition(departmentEmployee, position);
     }

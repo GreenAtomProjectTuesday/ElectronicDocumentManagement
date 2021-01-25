@@ -81,4 +81,10 @@ public class DocumentController {
         documentService.deleteDocument(document);
         return ResponseEntity.ok("Document was successfully deleted");
     }
+
+    @GetMapping("{document_id}")
+    public ResponseEntity<?> previewDocument(){
+        documentService.previewDocument();
+        return ResponseEntity.ok("");
+    }
 }

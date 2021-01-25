@@ -18,8 +18,8 @@ public class AttributeController {
 
     @PostMapping
     public ResponseEntity<?> registerAttribute(@RequestParam("value") String attributeValue,
-                                                    @RequestParam("document_id") Document document,
-                                                    @RequestParam("name") String attributeName) {
+                                               @RequestParam("document_id") Document document,
+                                               @RequestParam("name") String attributeName) {
         if (!documentAttributeService.registerAttribute(attributeName, document, attributeValue)) {
             return ResponseEntity.ok("Attribute with such name already exists");
         }
@@ -28,7 +28,7 @@ public class AttributeController {
 
     @PatchMapping("{attribute_id}")
     public ResponseEntity<?> editAttribute(@RequestParam("new_value") String newAttributeValue,
-                                                @PathVariable("attribute_id") AttributeValue attributeValue) {
+                                           @PathVariable("attribute_id") AttributeValue attributeValue) {
         documentAttributeService.editAttributeValue(attributeValue, newAttributeValue);
         return ResponseEntity.ok("Attribute was successfully edited");
     }

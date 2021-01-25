@@ -30,12 +30,10 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
-    public Employee editEmployee(Employee employee, Employee employeeFromDb) {
+    public void editEmployee(Employee employee, Employee employeeFromDb) {
 
         BeanUtils.copyProperties(employee, employeeFromDb, "id");
 
-        Employee updatedEmployee = employeeRepository.save(employeeFromDb);
-
-        return updatedEmployee;
+        employeeRepository.save(employeeFromDb);
     }
 }

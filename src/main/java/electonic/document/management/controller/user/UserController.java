@@ -40,7 +40,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("{user_id}/roles")
     public ResponseEntity<?> setRole(@RequestParam("role") Role role,
-                                          @PathVariable("user_id") User user) {
+                                     @PathVariable("user_id") User user) {
         if (!userService.setUserRole(role, user)) {
             return ResponseEntity.ok("User with such id is not exists!");
         }
@@ -66,8 +66,8 @@ public class UserController {
     //TODO think about logic for delete user
     @DeleteMapping("{user_id}")
     public ResponseEntity<?> deleteUser(@PathVariable("user_id") User user,
-                                             HttpServletResponse response,
-                                             @AuthenticationPrincipal User currentUser) {
+                                        HttpServletResponse response,
+                                        @AuthenticationPrincipal User currentUser) {
         if (!userService.deleteUser(user, response, currentUser))
             return ResponseEntity.ok("U can't delete another user");
         return ResponseEntity.ok("User was successfully deleted");

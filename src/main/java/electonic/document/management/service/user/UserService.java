@@ -4,6 +4,7 @@ import electonic.document.management.config.filter.FilterConstant;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.Role;
 import electonic.document.management.model.user.User;
+import electonic.document.management.repository.user.EmployeeRepository;
 import electonic.document.management.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,15 +18,18 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmployeeRepository employeeRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     @Override
@@ -55,6 +59,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getUsersByIds(Long[] user_ids) {
+
         return userRepository.findAllById(Arrays.asList(user_ids));
     }
 
@@ -63,7 +68,8 @@ public class UserService implements UserDetailsService {
             return false;
         }
 
-        user.getRole().add(role);
+        Set<Role> userRole = user.getRole();
+        userRole.add(role);
         userRepository.save(user);
         return true;
     }
@@ -81,6 +87,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void addEmployee(User user, String fullName, String phone) {
+
         Employee employee = new Employee();
         employee.setUser(user);
         employee.setFullName(fullName);
@@ -88,6 +95,7 @@ public class UserService implements UserDetailsService {
         user.setEmployee(employee);
 
         userRepository.save(user);
+
     }
 
     //todo handle null optional

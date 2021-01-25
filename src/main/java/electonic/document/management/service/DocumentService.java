@@ -63,4 +63,8 @@ public class DocumentService {
     public void saveDocument(Document document) {
         documentRepository.save(document);
     }
+
+    public void previewDocument() {
+
+    }
 }

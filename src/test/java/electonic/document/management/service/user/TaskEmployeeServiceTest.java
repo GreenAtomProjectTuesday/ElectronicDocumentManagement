@@ -24,9 +24,6 @@ class TaskEmployeeServiceTest {
     @MockBean
     TaskEmployeeRepository taskEmployeeRepository;
 
-    @MockBean
-    TaskEmployee taskEmployee;
-
     @Test
     void addTaskEmployee() {
         Task task = new Task();
@@ -47,6 +44,7 @@ class TaskEmployeeServiceTest {
 
     @Test
     void deleteTaskEmployee() {
+        TaskEmployee taskEmployee = new TaskEmployee();
 
         taskEmployeeService.deleteTaskEmployee(taskEmployee);
     }
@@ -54,6 +52,7 @@ class TaskEmployeeServiceTest {
     @Test
     void setTaskEmployeePosition() {
         Duty duty = Duty.CURATOR;
+        TaskEmployee taskEmployee = new TaskEmployee();
 
         boolean taskEmployeePosition =
                 taskEmployeeService.setTaskEmployeePosition(taskEmployee, duty);
@@ -63,13 +62,12 @@ class TaskEmployeeServiceTest {
 
     @Test
     void deleteTaskEmployeePosition() {
-        Duty duty = Duty.CURATOR;
+        TaskEmployee taskEmployee = new TaskEmployee();
 
-        taskEmployee.setEmployee(new Employee());
-        taskEmployee.setTask(new Task());
+        taskEmployeeService.addTaskEmployee(taskEmployee.getTask(), taskEmployee.getEmployee());
 
         boolean deleteTaskEmployeePosition =
-                taskEmployeeService.deleteTaskEmployeePosition(taskEmployee, duty);
+                taskEmployeeService.deleteTaskEmployeePosition(taskEmployee, Duty.CURATOR);
 
         Assert.assertTrue(deleteTaskEmployeePosition);
 

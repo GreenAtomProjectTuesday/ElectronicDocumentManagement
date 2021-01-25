@@ -3,6 +3,7 @@ package electonic.document.management.service.user;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.repository.user.EmployeeRepository;
+import electonic.document.management.repository.user.UserRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -12,29 +13,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class EmployeeServiceTest {
     @Autowired
-    EmployeeService employeeService;
+    private EmployeeService employeeService;
 
     @MockBean
-    EmployeeRepository employeeRepository;
-
-    @MockBean
-    UserService userService;
-
-    @MockBean
-    User user;
+    private EmployeeRepository employeeRepository;
 
     @Test
     void employeeExistsCheck() {
-        userService.addEmployee(user, "testName", "testNumber");
 
-        boolean isEmployeeExists = employeeService.employeeExistsCheck(user.getId());
-
-        Assert.assertTrue(isEmployeeExists);
     }
 
     @Test
@@ -55,11 +47,12 @@ class EmployeeServiceTest {
     @Test
     void editEmployee() {
         Employee employee = new Employee();
+        employee.setFullName("William Henry Gates III");
 
         Employee employeeFromDb = new Employee();
 
-        Employee updateEmployee = employeeService.editEmployee(employee, employeeFromDb);
+        employeeService.editEmployee(employee, employeeFromDb);
 
-        Assert.assertNotNull(updateEmployee);
+        Assert.assertEquals(employeeFromDb.getFullName(), employeeFromDb.getFullName());
     }
 }

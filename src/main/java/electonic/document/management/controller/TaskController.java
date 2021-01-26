@@ -82,14 +82,11 @@ public class TaskController {
     public ResponseEntity<?> findMessages(
             @RequestParam(value = "name_contains", required = false) String subStringInName,
             @RequestParam(value = "task_description_contains", required = false) String subStringInNameTaskDescription,
-            @RequestParam(value = "creation_date", required = false) @DateTimeFormat LocalDateTime creationDate,
-            @RequestParam(value = "expiry_date", required = false) @DateTimeFormat LocalDateTime expiryDate,
             @RequestParam(value = "ready_to_review", required = false) Boolean readyToReview) throws JsonProcessingException {
-        if (subStringInName == null && subStringInNameTaskDescription == null && creationDate == null
-                && expiryDate == null && readyToReview == null)
+        if (subStringInName == null && subStringInNameTaskDescription == null && readyToReview == null)
             return ResponseEntity.ok("No parameters were specified");
         List<Task> departmentsWithParams = taskService
-                .findTasksByExample(subStringInName, subStringInNameTaskDescription, creationDate, expiryDate, readyToReview);
+                .findTasksByExample(subStringInName, subStringInNameTaskDescription, readyToReview);
         return ResponseEntity.ok(objectMapper
                 .writerWithView(Views.FullClass.class)
                 .writeValueAsString(departmentsWithParams));

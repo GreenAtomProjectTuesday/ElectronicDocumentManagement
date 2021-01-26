@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -64,4 +63,13 @@ public class FindMessageTest {
                 .andExpect(jsonPath("$.*", hasSize(1)));
     }
 
+    @Test
+    public void testFindMessageByTask() throws Exception {
+        Cookie authorization = login(this.mockMvc, "1", "1");
+        this.mockMvc.perform(get("/messages/with_params")
+                .param("task_id", "20")
+                .cookie(authorization))
+                .andDo(print())
+                .andExpect(jsonPath("$.*", hasSize(2)));
+    }
 }

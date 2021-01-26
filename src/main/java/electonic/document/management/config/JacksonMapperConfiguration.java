@@ -11,6 +11,7 @@ public class JacksonMapperConfiguration {
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
         objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         return objectMapper;
     }

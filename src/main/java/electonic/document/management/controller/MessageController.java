@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -64,15 +65,13 @@ public class MessageController {
     }
 
     @GetMapping("with_params")
+    // TODO: 20.01.2021 fix search by date add date range?
     public ResponseEntity<?> findMessages(
             @RequestParam(value = "text_contains", required = false) String subStringInText,
             @RequestParam(value = "author_id", required = false) User user,
-            @RequestParam(value = "task_id", required = false) Task task,
-            @RequestParam(value = "creation_date", required = false) @DateTimeFormat LocalDateTime creationDate)
+            @RequestParam(value = "task_id", required = false) Task task)
             throws JsonProcessingException {
-        if (subStringInText == null && user == null && task == null && creationDate == null)
-            return ResponseEntity.ok("No parameters were specified");
-        List<Message> departmentsWithParams = messageService.findMessagesByExample(subStringInText, user, task, creationDate);
+        List<Message> departmentsWithParams = messageService.findMessagesByExample(subStringInText, user, task);
         return ResponseEntity.ok(objectMapper
                 .writerWithView(Views.FullClass.class)
                 .writeValueAsString(departmentsWithParams));

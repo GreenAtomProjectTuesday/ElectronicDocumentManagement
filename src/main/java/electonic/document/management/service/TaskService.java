@@ -48,7 +48,7 @@ public class TaskService {
 
     //TODO find by element in list of employees and documents
     public List<Task> findTasksByExample(String subStringInName, String subStringInNameTaskDescription,
-                                         LocalDateTime creationDate, LocalDateTime expiryDate, Boolean readyToReview) {
+                                         Boolean readyToReview) {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()
                 .withMatcher("name", match -> match.contains())
@@ -57,8 +57,6 @@ public class TaskService {
         Task task = new Task();
         task.setName(subStringInName);
         task.setTaskDescription(subStringInNameTaskDescription);
-        task.setCreationDate(creationDate);
-        task.setExpiryDate(expiryDate);
         task.setReadyToReview(readyToReview);
 
         Example<Task> taskExample = Example.of(task, matcher);

@@ -36,6 +36,14 @@ public class UserController {
         return ResponseEntity.ok("user was registered");
     }
 
+    @GetMapping("/{username}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable("username") String username) throws JsonProcessingException {
+        User user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(objectMapper
+                .writerWithView(Views.FullClass.class)
+                .writeValueAsString(user));
+    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("{user_id}/roles")
     public ResponseEntity<?> setRole(@RequestParam("role") Role role,
@@ -49,7 +57,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<?> getAllUsers() throws JsonProcessingException {
         return ResponseEntity.ok(objectMapper
-                .writerWithView(Views.IdName.class)
+                .writerWithView(Views.FullProfile.class)
                 .writeValueAsString(userService.getAllUsers()));
     }
 
@@ -66,13 +74,11 @@ public class UserController {
     public ResponseEntity<?> findMessages(
             @RequestParam(value = "username_contains", required = false) String subStringInUsername,
             @RequestParam(value = "password_contains", required = false) String subStringInPassword,
-            @RequestParam(value = "email_contains", required = false) String subStringInEmail,
-            @RequestParam(value = "registration_date", required = false) LocalDateTime registrationDate) throws JsonProcessingException {
-        if (subStringInUsername == null && subStringInPassword == null && subStringInEmail == null
-                && registrationDate == null)
+            @RequestParam(value = "email_contains", required = false) String subStringInEmail) throws JsonProcessingException {
+        if (subStringInUsername == null && subStringInPassword == null && subStringInEmail == null)
             return ResponseEntity.ok("No parameters were specified");
         List<User> departmentsWithParams = userService
-                .findTasksByExample(subStringInUsername, subStringInPassword, subStringInEmail, registrationDate);
+                .findTasksByExample(subStringInUsername, subStringInPassword, subStringInEmail);
         return ResponseEntity.ok(objectMapper
                 .writerWithView(Views.FullClass.class)
                 .writeValueAsString(departmentsWithParams));

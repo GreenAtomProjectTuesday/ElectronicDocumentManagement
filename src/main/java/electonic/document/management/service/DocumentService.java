@@ -77,7 +77,7 @@ public class DocumentService {
     }
 
     public List<Document> findDocumentsByExample(String subStringInName, String fileUuid, String fileType,
-                                                 LocalDateTime creationDate, Task task, Employee owner) {
+                                                 Task task, Employee owner) {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()
                 .withMatcher("name", match -> match.contains())
@@ -88,7 +88,6 @@ public class DocumentService {
         document.setName(subStringInName);
         document.setFileUuid(fileUuid);
         document.setFileType(fileType);
-        document.setCreationDate(creationDate);
         document.setTask(task);
         document.setOwner(owner);
 

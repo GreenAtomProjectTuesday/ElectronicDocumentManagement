@@ -111,15 +111,14 @@ public class DocumentController {
             @RequestParam(value = "name_contains", required = false) String subStringInName,
             @RequestParam(value = "file_uuid", required = false) String fileUuid,
             @RequestParam(value = "file_type", required = false) String fileType,
-            @RequestParam(value = "creation_date", required = false) LocalDateTime creationDate,
             @RequestParam(value = "task_id", required = false) Task task,
             @RequestParam(value = "owner_id", required = false) Employee owner
     ) throws JsonProcessingException {
         if (subStringInName == null && fileUuid == null && fileType == null
-                && creationDate == null && task == null && owner == null)
+                && task == null && owner == null)
             return ResponseEntity.ok("No parameters were specified");
         List<Document> departmentsWithParams = documentService
-                .findDocumentsByExample(subStringInName, fileUuid, fileType, creationDate, task, owner);
+                .findDocumentsByExample(subStringInName, fileUuid, fileType, task, owner);
         return ResponseEntity.ok(objectMapper
                 .writerWithView(Views.DocumentParameters.class)
                 .writeValueAsString(departmentsWithParams));

@@ -22,6 +22,7 @@ public class MessageService {
 
     public void createMessage(Message message, User user) {
         message.setAuthor(user);
+        message.setCreationDate(LocalDateTime.now());
         messageRepository.save(message);
     }
 
@@ -38,7 +39,7 @@ public class MessageService {
         return messageRepository.getAllByTask(task);
     }
 
-    public List<Message> findMessagesByExample(String subStringInText, User user, Task task, LocalDateTime creationDate) {
+    public List<Message> findMessagesByExample(String subStringInText, User user, Task task) {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()
                 .withMatcher("text", match -> match.contains());
@@ -47,7 +48,6 @@ public class MessageService {
         message.setText(subStringInText);
         message.setAuthor(user);
         message.setTask(task);
-        message.setCreationDate(creationDate);
 
         Example<Message> messageExample = Example.of(message, matcher);
         return messageRepository.findAll(messageExample);

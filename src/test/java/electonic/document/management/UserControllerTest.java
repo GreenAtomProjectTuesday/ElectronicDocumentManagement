@@ -70,7 +70,7 @@ public class UserControllerTest {
         this.mockMvc.perform(get("/documents")
                 .cookie(authorization))
                 .andDo(print());
-        this.mockMvc.perform(get("/documents")
+        this.mockMvc.perform(get("/employees")
                 .cookie(authorization))
                 .andDo(print());
         this.mockMvc.perform(delete("/users")
@@ -78,5 +78,4 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(content().string(containsString("Your user account was successfully deleted")));
     }
-
 }

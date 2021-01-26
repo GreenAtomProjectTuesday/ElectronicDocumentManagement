@@ -101,7 +101,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> findTasksByExample(String subStringInUsername, String subStringInPassword,
-                                         String subStringInEmail, LocalDateTime registrationDate) {
+                                         String subStringInEmail) {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()
                 .withMatcher("username", match -> match.contains())
@@ -112,9 +112,12 @@ public class UserService implements UserDetailsService {
         user.setUsername(subStringInUsername);
         user.setPassword(subStringInPassword);
         user.setEmail(subStringInEmail);
-        user.setRegistrationDate(registrationDate);
 
         Example<User> userExample = Example.of(user, matcher);
         return userRepository.findAll(userExample);
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

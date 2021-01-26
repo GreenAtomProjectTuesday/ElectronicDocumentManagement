@@ -14,12 +14,14 @@ import org.springframework.test.web.servlet.MvcResult;
 import javax.servlet.http.Cookie;
 
 import static electonic.document.management.LoginTest.login;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -74,7 +76,7 @@ public class MessageControllerTest {
                 .cookie(authorization))
                 .andDo(print())
                 .andExpect(content().string(containsString("\"id\":8,\"text\":\"hello message hi privet\"," +
-                        "\"creationDate\":{},\"author\":{\"id\":1,\"username\":\"1\"}")));
+                        "\"creationDate\":\"2020-12-18 19:26:57\",\"author\":{\"id\":1,\"username\":\"1\"}")));
     }
 
     @Test
@@ -87,5 +89,17 @@ public class MessageControllerTest {
         this.mockMvc.perform(get("/messages/in_task/3").cookie(authorization))
                 .andDo(print())
                 .andExpect(content().string(not(containsString("hello message hi privet"))));
+    }
+
+    @Test
+    public void testDateInMessage() throws Exception {
+        Cookie authorization = login(this.mockMvc, "1", "1");
+        this.mockMvc.perform(post("/messages")
+                .param("text", "test message")
+                .param("task", "3")
+                .cookie(authorization))
+                .andDo(print())
+                .andExpect(content().string(containsString("Message was successfully created")));
+        getAllMessagesInTaskThreeAndExpectString(authorization, "test message");
     }
 }

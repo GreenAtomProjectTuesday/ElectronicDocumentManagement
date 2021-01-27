@@ -64,7 +64,9 @@ public class DocumentService {
         documentRepository.save(document);
     }
 
-    public void previewDocument() {
 
+    public byte[] previewDocument(Document document) {
+        Document documentByName = documentRepository.getDocumentByName(document.getName());
+        return documentByName.getContent();
     }
 }

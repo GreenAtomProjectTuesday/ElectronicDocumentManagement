@@ -82,4 +82,9 @@ public class DocumentControllerTest {
                 .andDo(print())
                 .andExpect(content().string(containsString("Document was successfully deleted")));
     }
+
+    @Test
+    public void previewDocument(){
+
+    }
 }

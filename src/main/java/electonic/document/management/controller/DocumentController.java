@@ -83,8 +83,7 @@ public class DocumentController {
     }
 
     @GetMapping("{document_id}")
-    public ResponseEntity<?> previewDocument(){
-        documentService.previewDocument();
-        return ResponseEntity.ok("");
+    public byte[] previewDocument(@PathVariable("document_id") Document document){
+        return documentService.previewDocument(document);
     }
 }

@@ -3,6 +3,7 @@ package electonic.document.management.service;
 import electonic.document.management.model.RequestParametersException;
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.Task;
+import electonic.document.management.model.document.DocumentStateType;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.model.document.DocumentState;
@@ -44,11 +45,10 @@ public class DocumentService {
         }
 
         document.setCreationDate(LocalDateTime.now());
-        document.setOwner(employee);
         document.setTask(task);
         document.setDocumentStates(new LinkedList<>());
 
-        DocumentState documentState = documentStateService.createState(document, employee, commitMessage);
+        DocumentState documentState = documentStateService.createState(document, employee, commitMessage, DocumentStateType.CREATE);
         document.getDocumentStates().add(documentState);
 
         documentRepository.save(document);
@@ -77,7 +77,7 @@ public class DocumentService {
     }
 
     public List<Document> findDocumentsByExample(String subStringInName, String fileUuid, String fileType,
-                                                 Task task, Employee owner) {
+                                                 Task task) {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()
                 .withMatcher("name", match -> match.contains())
@@ -89,7 +89,6 @@ public class DocumentService {
         document.setFileUuid(fileUuid);
         document.setFileType(fileType);
         document.setTask(task);
-        document.setOwner(owner);
 
         Example<Document> documentExample = Example.of(document, matcher);
         return documentRepository.findAll(documentExample);

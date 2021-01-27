@@ -2,6 +2,7 @@ package electonic.document.management.service;
 
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.document.DocumentState;
+import electonic.document.management.model.document.DocumentStateType;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.repository.DocumentStateRepository;
@@ -18,12 +19,14 @@ public class DocumentStateService {
     }
 
 
-    public DocumentState createState(Document document, Employee employee, String commitMessage) {
+    public DocumentState createState(Document document, Employee employee, String commitMessage,
+                                     DocumentStateType documentStateType) {
         DocumentState documentState = new DocumentState();
         documentState.setDocument(document);
         documentState.setCommitDate(LocalDateTime.now());
         documentState.setCreator(employee);
         documentState.setCommitMessage(commitMessage);
+        documentState.setDocumentStateType(documentStateType);
 
         return documentState;
     }

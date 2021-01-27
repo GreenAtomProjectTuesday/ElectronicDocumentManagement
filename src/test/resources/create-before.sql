@@ -42,8 +42,8 @@ values (1, 1, 1, '1', 1, 2);
 insert into employee (user_id, full_name, phone)
 values (1, 'test employee', 1);
 
-insert into document(id, name, content, user_id)
-values (5, 'test document', 'test content', 1);
+insert into document(id, name, content)
+values (5, 'test document', 'test content');
 
 insert into attribute_value(id, value)
 values (6, 'test attribute value');

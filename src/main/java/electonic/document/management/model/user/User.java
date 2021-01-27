@@ -45,7 +45,8 @@ public class User implements UserDetails {
     @JsonView(Views.IdNameRoles.class)
     private Set<Role> role;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // TODO: 26.01.2021 orphanRemoval = true? Or store them after deleting user?
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private Employee employee;
 

@@ -23,6 +23,9 @@ public class EmployeeController {
     public ResponseEntity<?> addEmployee(@RequestParam("user_id") User user,
                                          @RequestParam("full_name") String fullName,
                                          @RequestParam("phone") String phone) {
+        if (user == null) {
+            return ResponseEntity.ok("User with this id does not exists");
+        }
         boolean employeeExists = employeeService.employeeExistsCheck(user.getId());
         if (employeeExists) {
             return ResponseEntity.ok("Such employee already exists");

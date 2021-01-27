@@ -40,6 +40,9 @@ public class Document {
     @JsonView(Views.IdName.class)
     private String fileType;
 
+    @JsonView(Views.IdName.class)
+    private String filePath;
+
     @JsonView(Views.DocumentParameters.class)
     private Long size;
 
@@ -52,11 +55,6 @@ public class Document {
     @JoinColumn(name = "task_id")
     @JsonView(Views.DocumentParameters.class)
     private Task task;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonView(Views.DocumentParameters.class)
-    private Employee owner;
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     @OrderColumn

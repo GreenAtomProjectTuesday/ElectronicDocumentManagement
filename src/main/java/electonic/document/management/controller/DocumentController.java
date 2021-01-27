@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import electonic.document.management.model.*;
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.document.DocumentState;
+import electonic.document.management.model.document.DocumentStateType;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
 import electonic.document.management.service.DocumentStateService;
@@ -82,7 +83,7 @@ public class DocumentController {
             @RequestParam(name = "commitMessage", defaultValue = "edit file") String commitMessage) throws IOException {
         try {
             Employee employee = employeeService.getEmployeeByUserId(user.getId());
-            DocumentState documentState = documentStateService.createState(document, employee, commitMessage);
+            DocumentState documentState = documentStateService.createState(document, employee, commitMessage, DocumentStateType.UPDATE);
             documentService.editDocument(document, file, documentState);
             return ResponseEntity.ok("Document was successfully edited. New state " + documentState.getCommitMessage());
         } catch (RequestParametersException e) {
@@ -111,14 +112,13 @@ public class DocumentController {
             @RequestParam(value = "name_contains", required = false) String subStringInName,
             @RequestParam(value = "file_uuid", required = false) String fileUuid,
             @RequestParam(value = "file_type", required = false) String fileType,
-            @RequestParam(value = "task_id", required = false) Task task,
-            @RequestParam(value = "owner_id", required = false) Employee owner
+            @RequestParam(value = "task_id", required = false) Task task
     ) throws JsonProcessingException {
         if (subStringInName == null && fileUuid == null && fileType == null
-                && task == null && owner == null)
+                && task == null)
             return ResponseEntity.ok("No parameters were specified");
         List<Document> departmentsWithParams = documentService
-                .findDocumentsByExample(subStringInName, fileUuid, fileType, task, owner);
+                .findDocumentsByExample(subStringInName, fileUuid, fileType, task);
         return ResponseEntity.ok(objectMapper
                 .writerWithView(Views.DocumentParameters.class)
                 .writeValueAsString(departmentsWithParams));

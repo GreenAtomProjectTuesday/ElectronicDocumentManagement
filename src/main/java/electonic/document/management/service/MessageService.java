@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-// TODO add test
 @Service
 public class MessageService {
     private final MessageRepository messageRepository;

@@ -34,8 +34,8 @@ public class TaskController {
 
     @PreAuthorize("hasAuthority('LEAD')")
     @PostMapping
-    public ResponseEntity<?> createTask(Task task, @AuthenticationPrincipal User user) {
-        if (!taskService.addTask(task, user)) {
+    public ResponseEntity<?> createTask(Task task) {
+        if (!taskService.addTask(task)) {
             return ResponseEntity.ok("Task with this name already exists");
         }
 

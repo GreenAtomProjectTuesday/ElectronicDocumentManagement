@@ -32,10 +32,10 @@ public class DocumentControllerTest {
     @Test
     public void testUploadFile() throws Exception {
         Cookie authorization = login(this.mockMvc, "1", "1");
-        MockMultipartFile jsonFile = new MockMultipartFile("test.json", "",
+        MockMultipartFile jsonFile = new MockMultipartFile("file", "test.json",
                 "application/json", "{\"key1\": \"value1\"}".getBytes());
         this.mockMvc.perform(multipart("/documents")
-                .file("file", jsonFile.getBytes())
+                .file(jsonFile)
                 .param("task_id", "3")
                 .cookie(authorization))
                 .andDo(print())
@@ -53,11 +53,11 @@ public class DocumentControllerTest {
 
     @Test
     public void testEditDocument() throws Exception {
-        MockMultipartFile jsonFile = new MockMultipartFile("test.json", "",
+        MockMultipartFile jsonFile = new MockMultipartFile("new_file", "test.json",
                 "application/json", "{\"key2\": \"value2\"}".getBytes());
         Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(multipart("/documents/5")
-                .file("new_file", jsonFile.getBytes())
+                .file(jsonFile)
                 .param("commitMessage", "test commit message")
                 .cookie(authorization))
                 .andDo(print())

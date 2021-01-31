@@ -1,6 +1,7 @@
 package electonic.document.management.service;
 
 import electonic.document.management.model.Message;
+import electonic.document.management.model.RequestParametersException;
 import electonic.document.management.model.Task;
 import electonic.document.management.model.user.User;
 import electonic.document.management.repository.TaskRepository;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TaskService {
@@ -19,11 +22,12 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public boolean addTask(Task task, User user) {
+    public boolean addTask(Task task) {
         Task taskFromDb = taskRepository.getTaskByName(task.getName());
         if (taskFromDb != null) {
             return false;
         }
+        task.setTaskUuid(UUID.randomUUID());
         task.setCreationDate(LocalDateTime.now());
 
         taskRepository.save(task);
@@ -61,5 +65,13 @@ public class TaskService {
 
         Example<Task> taskExample = Example.of(task, matcher);
         return taskRepository.findAll(taskExample);
+    }
+
+    public Task getTaskById(Long id) throws RequestParametersException {
+        Optional<Task> optionalTask = taskRepository.findById(id);
+        if (optionalTask.isEmpty()) {
+            throw new RequestParametersException("Task with such id does not exists!");
+        }
+        return optionalTask.get();
     }
 }

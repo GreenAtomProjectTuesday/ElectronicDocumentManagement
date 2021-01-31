@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "document")
@@ -35,7 +36,7 @@ public class Document {
     private String name;
 
     @JsonView(Views.IdName.class)
-    private String fileUuid;
+    private UUID fileUuid;
 
     @JsonView(Views.IdName.class)
     private String fileType;
@@ -65,10 +66,6 @@ public class Document {
     @JsonView(Views.DocumentParameters.class)
     private List<DocumentAttribute> attribute;
 
-    //TODO refactor to filesystem
-    @JsonView(Views.FullDocument.class)
-    private byte[] content;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,7 +86,6 @@ public class Document {
                 ", fileName='" + name + '\'' +
                 ", fileType='" + fileType + '\'' +
                 ", size=" + size +
-                ", content=" + Arrays.toString(content) +
                 '}';
     }
 }

@@ -14,6 +14,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "task")
@@ -34,6 +35,9 @@ public class Task {
 
     @JsonView(Views.FullClass.class)
     private String taskDescription;
+
+    @JsonView(Views.FullClass.class)
+    private UUID taskUuid;
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

@@ -2,16 +2,18 @@ package electonic.document.management.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import electonic.document.management.model.*;
+import electonic.document.management.model.RequestParametersException;
+import electonic.document.management.model.Task;
+import electonic.document.management.model.Views;
 import electonic.document.management.model.document.Document;
 import electonic.document.management.model.document.DocumentState;
 import electonic.document.management.model.document.DocumentStateType;
 import electonic.document.management.model.user.Employee;
 import electonic.document.management.model.user.User;
-import electonic.document.management.service.DocumentStateService;
 import electonic.document.management.service.DocumentService;
+import electonic.document.management.service.DocumentStateService;
 import electonic.document.management.service.user.EmployeeService;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,9 +21,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.time.LocalDateTime;
+import java.io.IOException;
+import java.nio.file.FileSystemException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("documents")
@@ -61,15 +67,15 @@ public class DocumentController {
     public ResponseEntity<?> downloadDocument(@PathVariable("id") Long id) {
         try {
             Document document = documentService.getDocumentById(id);
-            InputStream input = new ByteArrayInputStream(document.getContent());
-            InputStreamResource resource = new InputStreamResource(input);
+            Path path = Paths.get(document.getFilePath());
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
             return ResponseEntity
                     .ok()
                     .contentLength(document.getSize())
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource);
-        } catch (RequestParametersException e) {
+        } catch (RequestParametersException | IOException e) {
             return ResponseEntity.ok(e.getMessage());
         }
     }
@@ -101,7 +107,7 @@ public class DocumentController {
 
     @DeleteMapping("{document_id}")
     // TODO: 03.12.2020 store in history
-    public ResponseEntity<?> deleteDocument(@PathVariable("document_id") Document document) {
+    public ResponseEntity<?> deleteDocument(@PathVariable("document_id") Document document) throws IOException {
         documentService.deleteDocument(document);
         return ResponseEntity.ok("Document was successfully deleted");
     }
@@ -110,7 +116,7 @@ public class DocumentController {
     @GetMapping("with_params")
     public ResponseEntity<?> findDocuments(
             @RequestParam(value = "name_contains", required = false) String subStringInName,
-            @RequestParam(value = "file_uuid", required = false) String fileUuid,
+            @RequestParam(value = "file_uuid", required = false) UUID fileUuid,
             @RequestParam(value = "file_type", required = false) String fileType,
             @RequestParam(value = "task_id", required = false) Task task
     ) throws JsonProcessingException {

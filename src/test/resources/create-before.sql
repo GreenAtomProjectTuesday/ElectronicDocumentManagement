@@ -33,8 +33,8 @@ insert into user_role(user_id, role)
 values (1, 'LEAD'),
        (1, 'ADMIN');
 
-insert into task(id, ready_to_review, name, task_description)
-values (3, false, 'eee', 'edm task test');
+insert into task(id, ready_to_review, task_uuid, name, task_description)
+values (3, false, '123e4567-e89b-12d3-a456-556642440000', 'eee', 'edm task test');
 
 insert into department(id, left_key, level, name, parent_id, right_key)
 values (1, 1, 1, '1', 1, 2);

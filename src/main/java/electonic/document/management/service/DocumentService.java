@@ -15,11 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DocumentService {
@@ -44,6 +47,7 @@ public class DocumentService {
             throw new RequestParametersException("Document with such name already exists!");
         }
 
+
         document.setCreationDate(LocalDateTime.now());
         document.setTask(task);
         document.setDocumentStates(new LinkedList<>());
@@ -51,6 +55,8 @@ public class DocumentService {
         DocumentState documentState = documentStateService.createState(document, employee, commitMessage, DocumentStateType.CREATE);
         document.getDocumentStates().add(documentState);
 
+        // TODO how did save document work with transactional?
+        documentUtils.saveFile(document, file);
         documentRepository.save(document);
     }
 
@@ -67,16 +73,30 @@ public class DocumentService {
     }
 
     public void editDocument(Document document, MultipartFile file, DocumentState documentState) throws IOException {
+        Document documentFromDb = documentRepository.getOne(document.getId());
+
+        File fileToDelete = new File(documentFromDb.getFilePath());
+        if (!fileToDelete.delete()) {
+            throw new IOException("File can't be deleted!");
+        }
+
         documentUtils.fileToDocument(document, file);
         document.getDocumentStates().add(documentState);
+        documentUtils.saveFile(document, file);
         documentRepository.save(document);
     }
 
-    public void deleteDocument(Document document) {
+    public void deleteDocument(Document document) throws IOException {
+        Document documentFromDb = documentRepository.getOne(document.getId());
+
+        File fileToDelete = new File(documentFromDb.getFilePath());
+        if (!fileToDelete.delete()) {
+            throw new IOException("File can't be deleted!");
+        }
         documentRepository.delete(document);
     }
 
-    public List<Document> findDocumentsByExample(String subStringInName, String fileUuid, String fileType,
+    public List<Document> findDocumentsByExample(String subStringInName, UUID fileUuid, String fileType,
                                                  Task task) {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()

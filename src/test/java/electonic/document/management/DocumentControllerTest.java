@@ -48,7 +48,8 @@ public class DocumentControllerTest {
         this.mockMvc.perform(get("/documents")
                 .cookie(authorization))
                 .andDo(print())
-                .andExpect(content().string(containsString("test document")));
+                .andExpect(content().string(containsString("\"id\":5,\"name\":\"1\"," +
+                        "\"fileUuid\":\"018ea3d6-846f-399d-ada9-67b90b419841\"")));
     }
 
     @Test

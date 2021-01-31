@@ -66,6 +66,7 @@ public class DocumentControllerTest {
 
     @Test
     public void testDeleteDocument() throws Exception {
+        testUploadFile();
         Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(delete("/documents/5")
                 .cookie(authorization))

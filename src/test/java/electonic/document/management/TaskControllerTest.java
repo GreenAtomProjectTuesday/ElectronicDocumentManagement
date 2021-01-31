@@ -32,7 +32,7 @@ public class TaskControllerTest {
     public void testTaskCreation() throws Exception {
         Cookie authorization = login(this.mockMvc, "1", "1");
         this.mockMvc.perform(post("/tasks")
-                .param("taskName", "1")
+                .param("name", "1")
                 .param("taskDescription", "1")
                 .cookie(authorization))
                 .andDo(print())
